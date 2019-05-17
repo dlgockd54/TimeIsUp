@@ -34,4 +34,5 @@ dependencies {
     implementation('com.github.bumptech.glide:glide:4.9.0') {
         exclude group: 'com.android.support'
     }
+    implementation 'com.android.support:design:26.1.0'
 }

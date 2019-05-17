@@ -1,10 +1,12 @@
 package com.example.timeisup.schedule
 
 import android.os.Bundle
+import android.support.design.widget.FloatingActionButton
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.Toolbar
 import android.util.Log
+import android.view.View
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
 import com.example.timeisup.BaseActivity
@@ -12,7 +14,7 @@ import com.example.timeisup.R
 import kotlinx.android.synthetic.main.activity_schedule_list.*
 import java.util.*
 
-class ScheduleListActivity : BaseActivity(), ScheduleListContract.View {
+class ScheduleListActivity : BaseActivity(), ScheduleListContract.View, View.OnClickListener {
     private val TAG: String = ScheduleListActivity::class.java.simpleName
 
     override lateinit var mPresenter: ScheduleListContract.Presenter
@@ -21,6 +23,7 @@ class ScheduleListActivity : BaseActivity(), ScheduleListContract.View {
     lateinit var mAdapter: ScheduleListAdapter
     lateinit var mLayoutManager: RecyclerView.LayoutManager
     lateinit var mGlideRequestManager: RequestManager
+    lateinit var mFloatingAction: FloatingActionButton
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,7 +33,6 @@ class ScheduleListActivity : BaseActivity(), ScheduleListContract.View {
         Log.d(TAG, "onCreate()")
 
         init()
-        addSchedule()
     }
 
     private fun init() {
@@ -43,8 +45,21 @@ class ScheduleListActivity : BaseActivity(), ScheduleListContract.View {
             layoutManager = mLayoutManager
         }
         mGlideRequestManager = Glide.with(this)
+        mFloatingAction = (fab_schedule_list as FloatingActionButton).apply {
+            setOnClickListener(this@ScheduleListActivity)
+        }
 
         initAdapter()
+    }
+
+    override fun onClick(v: View?) {
+        when(v?.id) {
+            R.id.fab_schedule_list -> {
+                Log.d(TAG, "fab clicked!")
+
+                addSchedule()
+            }
+        }
     }
 
     private fun initAdapter() {
