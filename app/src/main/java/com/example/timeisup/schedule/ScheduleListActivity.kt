@@ -1,5 +1,6 @@
 package com.example.timeisup.schedule
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.support.v7.widget.LinearLayoutManager
@@ -11,6 +12,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
 import com.example.timeisup.BaseActivity
 import com.example.timeisup.R
+import com.example.timeisup.scheduleadding.ScheduleAddingActivity
 import kotlinx.android.synthetic.main.activity_schedule_list.*
 import java.util.*
 
@@ -57,7 +59,8 @@ class ScheduleListActivity : BaseActivity(), ScheduleListContract.View, View.OnC
             R.id.fab_schedule_list -> {
                 Log.d(TAG, "fab clicked!")
 
-                addSchedule()
+                startActivity(Intent(this, ScheduleAddingActivity::class.java))
+                overridePendingTransition(R.anim.animation_slide_from_right, R.anim.animation_slide_to_left)
             }
         }
     }
