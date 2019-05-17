@@ -2,6 +2,7 @@ package com.example.timeisup.schedule
 
 import com.example.hclee.lifeguard.BasePresenter
 import com.example.hclee.lifeguard.BaseView
+import java.util.*
 
 /**
  * Created by hclee on 2019-05-15.
@@ -9,10 +10,11 @@ import com.example.hclee.lifeguard.BaseView
 
 interface ScheduleListContract {
     interface View: BaseView<Presenter> {
-
+        fun refreshAdapter()
     }
 
     interface Presenter: BasePresenter {
-
+        fun getScheduleList(): LinkedList<Schedule>
+        fun addSchedule(schedule: Schedule)
     }
 }
