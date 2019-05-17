@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">TimeIsUp</string>
+    <string name="add_date">날짜 설정</string>
+    <string name="edit_date">날짜 변경</string>
 </resources>
