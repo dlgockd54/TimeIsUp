@@ -7,8 +7,10 @@ import com.example.timeisup.BaseActivity
 import com.example.timeisup.R
 import kotlinx.android.synthetic.main.activity_schedule_adding.*
 
-class ScheduleAddingActivity : BaseActivity() {
+class ScheduleAddingActivity : BaseActivity(), ScheduleAddingContract.View {
     private val TAG: String = ScheduleAddingActivity::class.java.simpleName
+
+    override lateinit var mPresenter: ScheduleAddingContract.Presenter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
