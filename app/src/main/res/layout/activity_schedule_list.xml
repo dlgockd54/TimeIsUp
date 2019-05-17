@@ -8,6 +8,10 @@
         android:orientation="vertical"
         tools:context=".schedule.ScheduleListActivity">
 
+    <include
+            android:id="@+id/toolbar_schedule_list"
+            layout="@layout/toolbar"/>
+
     <android.support.v7.widget.RecyclerView
             android:id="@+id/rv_schedule_list"
             android:layout_width="match_parent"

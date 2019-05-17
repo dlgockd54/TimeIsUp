@@ -3,6 +3,7 @@ package com.example.timeisup.schedule
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.support.v7.widget.Toolbar
 import android.util.Log
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
@@ -24,6 +25,7 @@ class ScheduleListActivity : BaseActivity(), ScheduleListContract.View {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_schedule_list)
+        setSupportActionBar(toolbar_schedule_list as Toolbar)
 
         Log.d(TAG, "onCreate()")
 
