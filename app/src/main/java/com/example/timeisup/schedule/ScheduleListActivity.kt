@@ -1,18 +1,17 @@
 package com.example.timeisup.schedule
 
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.util.Log
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
-import com.example.hclee.lifeguard.BaseView
+import com.example.timeisup.BaseActivity
 import com.example.timeisup.R
 import kotlinx.android.synthetic.main.activity_schedule_list.*
 import java.util.*
 
-class ScheduleListActivity : AppCompatActivity(), ScheduleListContract.View {
+class ScheduleListActivity : BaseActivity(), ScheduleListContract.View {
     private val TAG: String = ScheduleListActivity::class.java.simpleName
 
     override lateinit var mPresenter: ScheduleListContract.Presenter
