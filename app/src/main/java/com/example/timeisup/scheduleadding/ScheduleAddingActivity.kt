@@ -23,6 +23,7 @@ class ScheduleAddingActivity
     lateinit var mEditDateImageView: ImageView
     lateinit var mDatePickerDialog: DatePickerDialog
     lateinit var mAddDateTextView: TextView
+    lateinit var mDateTextView: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,6 +43,7 @@ class ScheduleAddingActivity
             setOnClickListener(this@ScheduleAddingActivity)
         }
         mAddDateTextView = tv_add_date
+        mDateTextView = tv_date
 
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             mDatePickerDialog = DatePickerDialog(this
@@ -57,13 +59,15 @@ class ScheduleAddingActivity
     override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
         Log.d(TAG, "onDateSet()")
 
-        val date: String = "picked ${dayOfMonth}/${month}/${year}"
+        val date: String = "${year}년 ${month + 1}월 ${dayOfMonth}일"
 
         Toast.makeText(this, date, LENGTH_SHORT).show()
 
         mAddDateImageView.visibility = View.INVISIBLE
         mEditDateImageView.visibility = View.VISIBLE
         mAddDateTextView.text = resources.getString(R.string.edit_date)
+        mDateTextView.text = date
+        mDateTextView.visibility = View.VISIBLE
     }
 
     override fun onClick(v: View?) {
