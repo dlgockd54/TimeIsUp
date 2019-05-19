@@ -136,5 +136,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         super.onDestroy()
 
         Log.d(TAG, "onDestroy()")
+
+        mFusedLocationProviderClient.removeLocationUpdates(mLocationCallback) // Make the Google Play services disconnect
     }
 }
