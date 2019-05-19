@@ -25,6 +25,7 @@ class ScheduleAddingActivity
     lateinit var mAddDateTextView: TextView
     lateinit var mDateTextView: TextView
     lateinit var mAddDateRelativeLayout: RelativeLayout
+    lateinit var mAddPlaceRelativeLayout: RelativeLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,6 +43,9 @@ class ScheduleAddingActivity
         mAddDateTextView = tv_add_date
         mDateTextView = tv_date
         mAddDateRelativeLayout = rl_add_date.apply {
+            setOnClickListener(this@ScheduleAddingActivity)
+        }
+        mAddPlaceRelativeLayout = rl_add_place.apply {
             setOnClickListener(this@ScheduleAddingActivity)
         }
 
@@ -74,6 +78,9 @@ class ScheduleAddingActivity
         when(v?.id) {
             R.id.rl_add_date -> {
                 mDatePickerDialog.show()
+            }
+            R.id.rl_add_place -> {
+
             }
         }
     }
