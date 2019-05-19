@@ -30,10 +30,12 @@
             android:textSize="20sp"/>
 
     <RelativeLayout
-            android:layout_width="match_parent"
+            android:id="@+id/rl_add_date"
+            android:layout_width="wrap_content"
             android:layout_height="50dp"
             android:layout_marginTop="50dp"
-            android:orientation="horizontal">
+            android:clickable="true"
+            android:focusable="true">
 
         <ImageView
                 android:id="@+id/iv_add_date"
@@ -41,7 +43,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="30dp"
                 android:layout_centerVertical="true"
-                android:clickable="true"
                 android:visibility="visible"
                 android:background="@drawable/ic_add_circle_green_500_24dp"/>
 
@@ -51,7 +52,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="30dp"
                 android:layout_centerVertical="true"
-                android:clickable="true"
                 android:visibility="invisible"
                 android:background="@drawable/ic_edit_grey_500_24dp"/>
 
