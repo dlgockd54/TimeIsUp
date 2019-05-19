@@ -4,4 +4,5 @@
     <string name="edit_date">날짜 변경</string>
     <string name="add_place">장소 설정</string>
     <string name="edit_place">장소 변경</string>
+    <string name="title_activity_maps">Map</string>
 </resources>
