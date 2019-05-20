@@ -65,6 +65,15 @@
                 android:text="@string/add_date"/>
     </RelativeLayout>
 
+    <TextView
+            android:id="@+id/tv_place"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="72dp"
+            android:visibility="gone"
+            android:textSize="20sp"/>
+
     <RelativeLayout
             android:id="@+id/rl_add_place"
             android:layout_width="wrap_content"

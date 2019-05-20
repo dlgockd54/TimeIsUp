@@ -105,25 +105,33 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, MapsContract.View 
         }
     }
 
-    private fun setCurrentCoordinates(coordinates: LatLng) {
+    private fun setCurrentCoordinates(name: String?, coordinates: LatLng?) {
         Log.d(TAG, "setCurrentCoordinates()")
 
-        mCurrentCoordinates = coordinates
+        coordinates?.let {
+            mCurrentCoordinates = it
 
-        setMarker()
+            name?.let {
+                setMarker(it)
+            }
+        }
     }
 
-    private fun setMarker() {
+    private fun setMarker(name: String) {
         val cameraUpdate: CameraUpdate = CameraUpdateFactory.newLatLng(mCurrentCoordinates)
         val markerOptions: MarkerOptions = MarkerOptions().apply {
             position(mCurrentCoordinates)
-            title("현재 위치")
-//            snippet("")
+            title(name)
             draggable(true)
+        }
+        val resultIntent = Intent().apply {
+            putExtra("name", name)
         }
 
         mCurrentMarker = mCurrentMarker ?: mMap.addMarker(markerOptions)
         mMap.moveCamera(cameraUpdate)
+
+        setResult(RESULT_OK, resultIntent)
     }
 
     override fun onBackPressed() {
@@ -158,8 +166,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, MapsContract.View 
 
                         Log.d(TAG, "Place: ${place.name}, ${place.id}, ${place.latLng}")
 
-                        place.latLng?.let {
-                            setCurrentCoordinates(it)
+                        place.let {
+                            setCurrentCoordinates(it.name, it.latLng)
                         }
                     }
                     AutocompleteActivity.RESULT_ERROR -> {

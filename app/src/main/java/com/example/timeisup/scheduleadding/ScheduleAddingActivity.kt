@@ -1,5 +1,6 @@
 package com.example.timeisup.scheduleadding
 
+import android.app.Activity
 import android.app.DatePickerDialog
 import android.content.Intent
 import android.os.Build
@@ -20,12 +21,20 @@ class ScheduleAddingActivity
     , View.OnClickListener {
     private val TAG: String = ScheduleAddingActivity::class.java.simpleName
 
+    companion object {
+        const val REQUEST_CODE: Int = 123
+    }
+
     override lateinit var mPresenter: ScheduleAddingContract.Presenter
     lateinit var mAddDateImageView: ImageView
     lateinit var mEditDateImageView: ImageView
     lateinit var mDatePickerDialog: DatePickerDialog
     lateinit var mAddDateTextView: TextView
     lateinit var mDateTextView: TextView
+    lateinit var mPlaceTextView: TextView
+    lateinit var mAddPlaceImageView: ImageView
+    lateinit var mEditPlaceImageView: ImageView
+    lateinit var mAddPlaceTextView: TextView
     lateinit var mAddDateRelativeLayout: RelativeLayout
     lateinit var mAddPlaceRelativeLayout: RelativeLayout
 
@@ -44,6 +53,10 @@ class ScheduleAddingActivity
         mEditDateImageView = iv_edit_date
         mAddDateTextView = tv_add_date
         mDateTextView = tv_date
+        mAddPlaceImageView = iv_add_place
+        mEditPlaceImageView = iv_edit_place
+        mPlaceTextView = tv_place
+        mAddPlaceTextView = tv_add_place
         mAddDateRelativeLayout = rl_add_date.apply {
             setOnClickListener(this@ScheduleAddingActivity)
         }
@@ -82,7 +95,36 @@ class ScheduleAddingActivity
                 mDatePickerDialog.show()
             }
             R.id.rl_add_place -> {
-                startActivity(Intent(this, MapsActivity::class.java))
+                startActivityForResult(Intent(this, MapsActivity::class.java), REQUEST_CODE)
+            }
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (requestCode == REQUEST_CODE) {
+            Log.d(TAG, "resultCode: $resultCode")
+
+            when (resultCode) {
+                Activity.RESULT_OK -> {
+                    data?.let {
+                        val placeName: String? = data.getStringExtra("name") ?: ""
+                        Log.d(TAG, "place name: $placeName")
+
+                        placeName?.let {
+                            mPlaceTextView.text = placeName
+                            mPlaceTextView.visibility = View.VISIBLE
+                            mAddPlaceImageView.visibility = View.INVISIBLE
+                            mEditPlaceImageView.visibility = View.VISIBLE
+                            mAddPlaceTextView.text = resources.getText(R.string.edit_place)
+                        }
+                    }
+                }
+                Activity.RESULT_CANCELED -> {
+
+                }
+                else -> {
+
+                }
             }
         }
     }
