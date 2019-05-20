@@ -5,6 +5,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import com.example.timeisup.schedule.ScheduleListActivity
 
 class MainActivity : BaseActivity() {
@@ -15,24 +16,30 @@ class MainActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-    }
 
-    override fun onResume() {
-        super.onResume()
+        Log.d(TAG, "onCreate()")
 
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            Log.d(TAG, "requestPermissions()")
+
             requestPermissions(mRequestList, REQUEST_CODE)
+        }
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        Log.d(TAG, "onRequestPermissionsResult()")
+
+        if(requestCode == REQUEST_CODE) {
+            for (result in grantResults) {
+                Log.d(TAG, "result: $result")
+
+                if (result == PackageManager.PERMISSION_DENIED) {
+                    return
+                }
+            }
         }
 
         startActivity(Intent(this, ScheduleListActivity::class.java))
         finish()
-    }
-
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        for(result in grantResults) {
-            if(result == PackageManager.PERMISSION_DENIED) {
-                finish()
-            }
-        }
     }
 }
