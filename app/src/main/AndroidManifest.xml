@@ -30,7 +30,7 @@
                 android:value="@string/google_maps_key"/>
 
         <activity
-                android:name=".scheduleadding.googlemap.MapsActivity"
+                android:name="com.example.timeisup.googlemap.MapsActivity"
                 android:label="@string/title_activity_maps">
         </activity>
         <activity android:name=".scheduleadding.ScheduleAddingActivity">

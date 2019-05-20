@@ -1,6 +1,8 @@
-package com.example.timeisup.scheduleadding.googlemap
+package com.example.timeisup.googlemap
 
 import android.Manifest
+import android.app.Activity
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Build
@@ -8,17 +10,28 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import com.example.timeisup.R
+import com.google.android.gms.common.api.Status
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.*
 
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.libraries.places.api.Places
+import com.google.android.libraries.places.api.model.Place
+import com.google.android.libraries.places.api.net.PlacesClient
+import com.google.android.libraries.places.widget.Autocomplete
+import com.google.android.libraries.places.widget.AutocompleteActivity
+import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
+import java.util.*
 
-class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
+class MapsActivity : AppCompatActivity(), OnMapReadyCallback, MapsContract.View {
     private val TAG: String = MapsActivity::class.java.simpleName
     private val UPDATE_INTERVAL: Long = 1000 * 30
     private val FASTEST_UPDATE_INTERVAL: Long = 1000 * 10
+    private val AUTOCOMPLETE_REQUEST_CODE: Int = 1
+
+    override lateinit var mPresenter: MapsContract.Presenter
 
     private lateinit var mMap: GoogleMap
     private var mCurrentMarker: Marker? = null
@@ -60,6 +73,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         }
 
         locationSettingsRequestBuilder.addLocationRequest(mLocationRequest)
+
+        Places.initialize(applicationContext, "AIzaSyCgZMRfANLqbbUNUkQhJHE4_i-S1K_r6DQ")
+        val placesClient: PlacesClient = Places.createClient(this)
     }
 
     /**
@@ -75,10 +91,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         Log.d(TAG, "onMapReady()")
 
         mMap = googleMap
-
-        // Add a marker in Sydney and move the camera
-        val sydney = LatLng(-34.0, 151.0)
-
         mMap.let {
             it.isMyLocationEnabled = true
             it.uiSettings.let {
@@ -119,6 +131,47 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
         finish()
         overridePendingTransition(R.anim.animation_slide_from_left, R.anim.animation_slide_to_right)
+    }
+
+    override fun onStart() {
+        super.onStart()
+
+        Log.d(TAG, "onStart()")
+
+        val fields: List<Place.Field> = Arrays.asList(Place.Field.ID, Place.Field.NAME)
+        val intent: Intent = Autocomplete.IntentBuilder(
+            AutocompleteActivityMode.OVERLAY, fields).build(this)
+
+        startActivityForResult(intent, AUTOCOMPLETE_REQUEST_CODE)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        Log.d(TAG, "onActivityResult()")
+
+        if(requestCode == AUTOCOMPLETE_REQUEST_CODE) {
+            Log.d(TAG, "resultCode: $resultCode")
+
+            data?.let {
+                val place: Place = Autocomplete.getPlaceFromIntent(it)
+
+                when (resultCode) {
+                    Activity.RESULT_OK -> {
+                        Log.d(TAG, "Place: ${place.name}, ${place.id}")
+                    }
+                    AutocompleteActivity.RESULT_ERROR -> {
+                        val status: Status = Autocomplete.getStatusFromIntent(it)
+
+                        Log.d(TAG, status.statusMessage)
+                    }
+                    Activity.RESULT_CANCELED -> {
+
+                    }
+                    else -> {
+
+                    }
+                }
+            }
+        }
     }
 
     override fun onResume() {

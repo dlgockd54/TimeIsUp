@@ -20,7 +20,7 @@ class ScheduleListAdapter(private var mScheduleList: LinkedList<Schedule>, priva
     : RecyclerView.Adapter<ScheduleListAdapter.ScheduleViewHolder>() {
     private val TAG: String = ScheduleListAdapter::class.java.simpleName
 
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ScheduleViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ScheduleViewHolder {
         Log.d(TAG, "onCreateViewHolder()")
 
         val view: View = (LayoutInflater.from(parent?.context).inflate(R.layout.item_schedule, parent, false))
@@ -33,10 +33,10 @@ class ScheduleListAdapter(private var mScheduleList: LinkedList<Schedule>, priva
         return mScheduleList.size
     }
 
-    override fun onBindViewHolder(holder: ScheduleViewHolder?, position: Int) {
+    override fun onBindViewHolder(holder: ScheduleViewHolder, position: Int) {
         Log.d(TAG, "onBindViewHolder()")
 
-        holder?.let {
+        holder.let {
             mGlideRequestManager.load(R.raw.schedule_icon)
                 .into(it.mScheduleImageView)
             it.mScheduleTextView.text = SimpleDateFormat("yyyy-MM-dd").format(mScheduleList[position].mDate)

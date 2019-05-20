@@ -11,7 +11,7 @@ import android.widget.*
 import android.widget.Toast.*
 import com.example.timeisup.BaseActivity
 import com.example.timeisup.R
-import com.example.timeisup.scheduleadding.googlemap.MapsActivity
+import com.example.timeisup.googlemap.MapsActivity
 import kotlinx.android.synthetic.main.activity_schedule_adding.*
 import java.util.*
 
