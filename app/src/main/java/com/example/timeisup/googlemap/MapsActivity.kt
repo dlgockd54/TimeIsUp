@@ -138,7 +138,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, MapsContract.View 
 
         Log.d(TAG, "onStart()")
 
-        val fields: List<Place.Field> = Arrays.asList(Place.Field.ID, Place.Field.NAME)
+        val fields: List<Place.Field> = Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG)
         val intent: Intent = Autocomplete.IntentBuilder(
             AutocompleteActivityMode.OVERLAY, fields).build(this)
 
@@ -156,7 +156,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, MapsContract.View 
                     Activity.RESULT_OK -> {
                         val place: Place = Autocomplete.getPlaceFromIntent(it)
 
-                        Log.d(TAG, "Place: ${place.name}, ${place.id}")
+                        Log.d(TAG, "Place: ${place.name}, ${place.id}, ${place.latLng}")
 
                         place.latLng?.let {
                             setCurrentCoordinates(it)
