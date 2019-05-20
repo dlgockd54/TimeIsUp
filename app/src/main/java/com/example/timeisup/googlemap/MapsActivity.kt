@@ -106,6 +106,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         val markerOptions: MarkerOptions = MarkerOptions().apply {
             position(mCurrentCoordinates)
             title("현재 위치")
+//            snippet("")
             draggable(true)
         }
 
