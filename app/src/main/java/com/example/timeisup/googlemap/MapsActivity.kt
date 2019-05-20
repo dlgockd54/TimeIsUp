@@ -37,7 +37,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, MapsContract.View 
     private var mCurrentMarker: Marker? = null
     private lateinit var mFusedLocationProviderClient: FusedLocationProviderClient
     private lateinit var mLocationRequest: LocationRequest
-    private lateinit var mCurrentLocation: Location
     private lateinit var mCurrentCoordinates: LatLng
     private val mLocationCallback: LocationCallback = object: LocationCallback() {
         override fun onLocationResult(locationResult: LocationResult?) {
@@ -46,7 +45,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, MapsContract.View 
             locationResult?.lastLocation?.let {
                 Log.d(TAG, "last location: ${it.latitude}, longitude: ${it.longitude}")
 
-                setCurrentLocation(it)
+//                setCurrentCoordinates(it)
             }
         }
     }
@@ -106,9 +105,10 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, MapsContract.View 
         }
     }
 
-    private fun setCurrentLocation(location: Location) {
-        mCurrentLocation = location
-        mCurrentCoordinates = LatLng(mCurrentLocation.latitude, mCurrentLocation.longitude)
+    private fun setCurrentCoordinates(coordinates: LatLng) {
+        Log.d(TAG, "setCurrentCoordinates()")
+
+        mCurrentCoordinates = coordinates
 
         setMarker()
     }
@@ -152,11 +152,15 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, MapsContract.View 
             Log.d(TAG, "resultCode: $resultCode")
 
             data?.let {
-                val place: Place = Autocomplete.getPlaceFromIntent(it)
-
                 when (resultCode) {
                     Activity.RESULT_OK -> {
+                        val place: Place = Autocomplete.getPlaceFromIntent(it)
+
                         Log.d(TAG, "Place: ${place.name}, ${place.id}")
+
+                        place.latLng?.let {
+                            setCurrentCoordinates(it)
+                        }
                     }
                     AutocompleteActivity.RESULT_ERROR -> {
                         val status: Status = Autocomplete.getStatusFromIntent(it)
