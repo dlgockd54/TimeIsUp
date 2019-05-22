@@ -8,16 +8,19 @@ import com.google.android.gms.maps.model.LatLng
 
 class Schedule() {
     private var time: Long? = 0
-    private var latLng: LatLng? = null
+    private var latitude: Double? = 0.0
+    private var longitude: Double? = 0.0
     private var isConfirmed: Boolean? = false
 
-    constructor(time: Long?, latLng: LatLng?, isConfirmed: Boolean?): this() {
+    constructor(time: Long?, latitude: Double?, longitude: Double?, isConfirmed: Boolean?): this() {
         this.time = time
-        this.latLng = latLng
+        this.latitude = latitude
+        this.longitude = longitude
         this.isConfirmed = isConfirmed
     }
 
     fun getTime(): Long? = time
-    fun getLatLng(): LatLng? = latLng
+    fun getLatitude(): Double? = latitude
+    fun getLongitude(): Double? = longitude
     fun getIsConfirmed(): Boolean? = isConfirmed
 }

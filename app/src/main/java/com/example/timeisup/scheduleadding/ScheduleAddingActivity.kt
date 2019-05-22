@@ -123,7 +123,7 @@ class ScheduleAddingActivity
                 var schedule: Schedule = Schedule()
 
                 mSchedulePlace.latLng?.let {
-                    schedule = Schedule(mScheduleTime, it, false)
+                    schedule = Schedule(mScheduleTime, it.latitude, it.longitude, false)
                 }
 
                 mPresenter.addScheduleToDatabase(schedule)
