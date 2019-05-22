@@ -13,6 +13,7 @@ import android.widget.Toast.*
 import com.example.timeisup.BaseActivity
 import com.example.timeisup.R
 import com.example.timeisup.googlemap.MapsActivity
+import com.example.timeisup.schedule.Schedule
 import com.google.android.libraries.places.api.model.Place
 import kotlinx.android.synthetic.main.activity_schedule_adding.*
 import java.util.*
@@ -36,8 +37,13 @@ class ScheduleAddingActivity
     lateinit var mAddPlaceImageView: ImageView
     lateinit var mEditPlaceImageView: ImageView
     lateinit var mAddPlaceTextView: TextView
+    lateinit var mAddSchduleButton: Button
+    lateinit var mCancelButton: Button
     lateinit var mAddDateRelativeLayout: RelativeLayout
     lateinit var mAddPlaceRelativeLayout: RelativeLayout
+
+    private lateinit var mScheduleCalendar: Calendar
+    private lateinit var mSchedulePlace: Place
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,6 +56,7 @@ class ScheduleAddingActivity
     }
 
     private fun init() {
+        mPresenter = ScheduleAddingPresenter(this)
         mAddDateImageView = iv_add_date
         mEditDateImageView = iv_edit_date
         mAddDateTextView = tv_add_date
@@ -58,6 +65,12 @@ class ScheduleAddingActivity
         mEditPlaceImageView = iv_edit_place
         mPlaceTextView = tv_place
         mAddPlaceTextView = tv_add_place
+        mAddSchduleButton = btn_add_schedule.apply {
+            setOnClickListener(this@ScheduleAddingActivity)
+        }
+        mCancelButton = btn_cancel.apply {
+            setOnClickListener(this@ScheduleAddingActivity)
+        }
         mAddDateRelativeLayout = rl_add_date.apply {
             setOnClickListener(this@ScheduleAddingActivity)
         }
@@ -74,6 +87,8 @@ class ScheduleAddingActivity
                 datePicker.minDate = Date().time
             }
         }
+
+        mScheduleCalendar = Calendar.getInstance()
     }
 
     override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
@@ -88,6 +103,10 @@ class ScheduleAddingActivity
         mAddDateTextView.text = resources.getString(R.string.edit_date)
         mDateTextView.text = date
         mDateTextView.visibility = View.VISIBLE
+
+        mScheduleCalendar.run {
+            set(year, month, dayOfMonth)
+        }
     }
 
     override fun onClick(v: View?) {
@@ -97,6 +116,17 @@ class ScheduleAddingActivity
             }
             R.id.rl_add_place -> {
                 startActivityForResult(Intent(this, MapsActivity::class.java), REQUEST_CODE)
+            }
+            R.id.btn_add_schedule -> {
+                val schedule: Schedule = Schedule(mScheduleCalendar, mSchedulePlace, false)
+
+                mPresenter.addScheduleToDatabase(schedule)
+
+                Thread.sleep(1000)
+                onBackPressed()
+            }
+            R.id.btn_cancel -> {
+                onBackPressed()
             }
         }
     }
@@ -112,6 +142,10 @@ class ScheduleAddingActivity
                         val placeName: String? = place?.name ?: "place.name is null!!"
 
                         Log.d(TAG, "place name: $placeName")
+
+                        place?.let {
+                            mSchedulePlace = it
+                        }
 
                         placeName?.let {
                             mPlaceTextView.text = placeName
@@ -136,6 +170,7 @@ class ScheduleAddingActivity
         super.onBackPressed()
 
         Log.d(TAG, "onBackPressed()")
+        finish()
         overridePendingTransition(R.anim.animation_slide_from_left, R.anim.animation_slide_to_right)
     }
 }

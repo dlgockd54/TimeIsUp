@@ -39,7 +39,7 @@ class ScheduleListAdapter(private var mScheduleList: LinkedList<Schedule>, priva
         holder.let {
             mGlideRequestManager.load(R.raw.schedule_icon)
                 .into(it.mScheduleImageView)
-            it.mScheduleTextView.text = SimpleDateFormat("yyyy-MM-dd").format(mScheduleList[position].mDate)
+            it.mScheduleTextView.text = SimpleDateFormat("yyyy-MM-dd").format(mScheduleList[position].mCalendar)
         }
     }
 

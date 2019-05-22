@@ -78,10 +78,4 @@ class ScheduleListActivity : BaseActivity(), ScheduleListContract.View, View.OnC
         mAdapter.replaceScheduleList(mPresenter.getScheduleList())
         mAdapter.notifyDataSetChanged()
     }
-
-    fun addSchedule() {
-        Log.d(TAG, "addSchedule()")
-
-        mPresenter.addSchedule(Schedule(Date(), "집"))
-    }
 }
