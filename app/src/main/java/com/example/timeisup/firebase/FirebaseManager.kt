@@ -2,9 +2,7 @@ package com.example.timeisup.firebase
 
 import android.util.Log
 import com.example.timeisup.schedule.Schedule
-import com.example.timeisup.schedule.TestClass
 import com.google.firebase.database.*
-import java.util.*
 
 /**
  * Created by hclee on 2019-05-22.
@@ -17,13 +15,7 @@ object FirebaseManager {
     private val mDatabaseReference: DatabaseReference = mFirebaseDatabase.reference
 
     fun addScheduleToDatabase(schedule: Schedule) {
-//        mDatabaseReference.child("schedule").push().setValue(schedule)
-//        val gregorianCalendar: GregorianCalendar = GregorianCalendar().apply {
-//            gregorianChange = Date(schedule.mCalendar.timeInMillis)
-//        }
-        val testVal: TestClass = TestClass("2", "3", "4")
-
-        mDatabaseReference.child("schedule").setValue(testVal).let {
+        mDatabaseReference.child("schedule").setValue(schedule).let {
             it.addOnSuccessListener {
                 Log.d(TAG, "onSuccess()")
             }

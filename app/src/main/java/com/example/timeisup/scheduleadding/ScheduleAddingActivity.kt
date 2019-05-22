@@ -43,6 +43,7 @@ class ScheduleAddingActivity
     lateinit var mAddPlaceRelativeLayout: RelativeLayout
 
     private lateinit var mScheduleCalendar: Calendar
+    private var mScheduleTime: Long = 0
     private lateinit var mSchedulePlace: Place
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -105,8 +106,9 @@ class ScheduleAddingActivity
         mDateTextView.visibility = View.VISIBLE
 
         mScheduleCalendar.run {
-            set(year, month, dayOfMonth)
+            set(year, month, dayOfMonth, 11, 11)
         }
+        mScheduleTime = mScheduleCalendar.timeInMillis
     }
 
     override fun onClick(v: View?) {
@@ -118,7 +120,11 @@ class ScheduleAddingActivity
                 startActivityForResult(Intent(this, MapsActivity::class.java), REQUEST_CODE)
             }
             R.id.btn_add_schedule -> {
-                val schedule: Schedule = Schedule(mScheduleCalendar, mSchedulePlace, false)
+                var schedule: Schedule = Schedule()
+
+                mSchedulePlace.latLng?.let {
+                    schedule = Schedule(mScheduleTime, it, false)
+                }
 
                 mPresenter.addScheduleToDatabase(schedule)
 
