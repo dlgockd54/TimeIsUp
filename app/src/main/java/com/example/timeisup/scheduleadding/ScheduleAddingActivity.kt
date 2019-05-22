@@ -37,7 +37,7 @@ class ScheduleAddingActivity
     lateinit var mAddPlaceImageView: ImageView
     lateinit var mEditPlaceImageView: ImageView
     lateinit var mAddPlaceTextView: TextView
-    lateinit var mAddSchduleButton: Button
+    lateinit var mAddScheduleButton: Button
     lateinit var mCancelButton: Button
     lateinit var mAddDateRelativeLayout: RelativeLayout
     lateinit var mAddPlaceRelativeLayout: RelativeLayout
@@ -66,7 +66,7 @@ class ScheduleAddingActivity
         mEditPlaceImageView = iv_edit_place
         mPlaceTextView = tv_place
         mAddPlaceTextView = tv_add_place
-        mAddSchduleButton = btn_add_schedule.apply {
+        mAddScheduleButton = btn_add_schedule.apply {
             setOnClickListener(this@ScheduleAddingActivity)
         }
         mCancelButton = btn_cancel.apply {
