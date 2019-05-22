@@ -124,14 +124,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, MapsContract.View 
             title(name)
             draggable(true)
         }
-        val resultIntent = Intent().apply {
-            putExtra("name", name)
-        }
 
         mCurrentMarker = mCurrentMarker ?: mMap.addMarker(markerOptions)
         mMap.moveCamera(cameraUpdate)
-
-        setResult(RESULT_OK, resultIntent)
     }
 
     override fun onBackPressed() {
@@ -153,6 +148,16 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, MapsContract.View 
         startActivityForResult(intent, AUTOCOMPLETE_REQUEST_CODE)
     }
 
+    private fun setPlaceForResult(place: Place) {
+        Log.d(TAG, "setPlaceForResult()")
+
+        val resultIntent = Intent().apply {
+            putExtra("place", place)
+        }
+
+        setResult(RESULT_OK, resultIntent)
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         Log.d(TAG, "onActivityResult()")
 
@@ -168,6 +173,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, MapsContract.View 
 
                         place.let {
                             setCurrentCoordinates(it.name, it.latLng)
+                            setPlaceForResult(it)
                         }
                     }
                     AutocompleteActivity.RESULT_ERROR -> {

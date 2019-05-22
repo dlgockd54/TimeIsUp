@@ -13,6 +13,7 @@ import android.widget.Toast.*
 import com.example.timeisup.BaseActivity
 import com.example.timeisup.R
 import com.example.timeisup.googlemap.MapsActivity
+import com.google.android.libraries.places.api.model.Place
 import kotlinx.android.synthetic.main.activity_schedule_adding.*
 import java.util.*
 
@@ -107,7 +108,9 @@ class ScheduleAddingActivity
             when (resultCode) {
                 Activity.RESULT_OK -> {
                     data?.let {
-                        val placeName: String? = data.getStringExtra("name") ?: ""
+                        val place: Place? = data.getParcelableExtra("place") ?: null
+                        val placeName: String? = place?.name ?: "place.name is null!!"
+
                         Log.d(TAG, "place name: $placeName")
 
                         placeName?.let {
