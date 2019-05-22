@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "901384282992",
+    "firebase_url": "https://careful-maxim-241106.firebaseio.com",
+    "project_id": "careful-maxim-241106",
+    "storage_bucket": "careful-maxim-241106.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:901384282992:android:f2714dae92628145",
+        "android_client_info": {
+          "package_name": "com.example.timeisup"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "901384282992-r5j8r6r0514kievc0kkn0ut2p9d475rn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDJUH8EewdowXXrDwFCTk1EQAp_jntdQJo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "901384282992-r5j8r6r0514kievc0kkn0ut2p9d475rn.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
