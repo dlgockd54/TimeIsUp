@@ -32,10 +32,10 @@ object FirebaseManager {
     }
 
     fun addChildEventListener(listener: ChildEventListener) {
-        mDatabaseReference.child("schedule").addChildEventListener(listener)
+        mDatabaseReference.addChildEventListener(listener)
     }
 
     fun removeChildEventListener(listener: ChildEventListener) {
-        mDatabaseReference.child("schedule").removeEventListener(listener)
+        mDatabaseReference.removeEventListener(listener)
     }
 }

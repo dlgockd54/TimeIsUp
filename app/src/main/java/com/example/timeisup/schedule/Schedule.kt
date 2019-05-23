@@ -23,4 +23,20 @@ class Schedule() {
     fun getLatitude(): Double? = latitude
     fun getLongitude(): Double? = longitude
     fun getIsConfirmed(): Boolean? = isConfirmed
+
+    fun setTime(time: Long) {
+        this.time = time
+    }
+
+    fun setLatitude(latitude: Double) {
+        this.latitude = latitude
+    }
+
+    fun setLongitude(longitude: Double) {
+        this.longitude = longitude
+    }
+
+    fun setIsConfirmed(isConfirmed: Boolean) {
+        this.isConfirmed = isConfirmed
+    }
 }

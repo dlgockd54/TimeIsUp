@@ -15,7 +15,7 @@ import java.util.*
  * Created by hclee on 2019-05-17.
  */
 
-class ScheduleListAdapter(private var mScheduleList: LinkedList<Schedule>, private val mGlideRequestManager: RequestManager)
+class ScheduleListAdapter(private var mScheduleList: LinkedList<Pair<Schedule, Long>>, private val mGlideRequestManager: RequestManager)
     : RecyclerView.Adapter<ScheduleListAdapter.ScheduleViewHolder>() {
     private val TAG: String = ScheduleListAdapter::class.java.simpleName
 
@@ -40,8 +40,10 @@ class ScheduleListAdapter(private var mScheduleList: LinkedList<Schedule>, priva
                 .into(it.mScheduleImageView)
 
             val calendar: Calendar = Calendar.getInstance().apply {
-                mScheduleList[position].getTime()?.let {
+                mScheduleList[position].first.getTime()?.let {
                     timeInMillis = it
+
+                    Log.d(TAG, "timeInMillis: $it")
                 }
             }
 
@@ -66,7 +68,7 @@ class ScheduleListAdapter(private var mScheduleList: LinkedList<Schedule>, priva
         return ret
     }
 
-    fun replaceScheduleList(scheduleList: LinkedList<Schedule>) {
+    fun replaceScheduleList(scheduleList: LinkedList<Pair<Schedule, Long>>) {
         mScheduleList = scheduleList
     }
 
