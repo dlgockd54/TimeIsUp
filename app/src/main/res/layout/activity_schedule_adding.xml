@@ -65,6 +65,48 @@
     </RelativeLayout>
 
     <TextView
+            android:id="@+id/tv_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="72dp"
+            android:visibility="gone"
+            android:textSize="20sp"/>
+
+    <RelativeLayout
+            android:id="@+id/rl_add_time"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp">
+
+        <ImageView
+                android:id="@+id/iv_add_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30dp"
+                android:layout_centerVertical="true"
+                android:visibility="visible"
+                android:background="@drawable/ic_add_circle_green_500_24dp"/>
+
+        <ImageView
+                android:id="@+id/iv_edit_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30dp"
+                android:layout_centerVertical="true"
+                android:visibility="invisible"
+                android:background="@drawable/ic_edit_grey_500_24dp"/>
+
+        <TextView
+                android:id="@+id/tv_add_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="72dp"
+                android:textSize="20sp"
+                android:layout_centerVertical="true"
+                android:text="@string/add_time"/>
+    </RelativeLayout>
+
+    <TextView
             android:id="@+id/tv_place"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

@@ -2,6 +2,7 @@ package com.example.timeisup.scheduleadding
 
 import android.app.Activity
 import android.app.DatePickerDialog
+import android.app.TimePickerDialog
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
@@ -20,7 +21,7 @@ import java.util.*
 
 class ScheduleAddingActivity
     : BaseActivity(), ScheduleAddingContract.View, DatePickerDialog.OnDateSetListener
-    , View.OnClickListener {
+    , TimePickerDialog.OnTimeSetListener, View.OnClickListener {
     private val TAG: String = ScheduleAddingActivity::class.java.simpleName
 
     companion object {
@@ -31,15 +32,21 @@ class ScheduleAddingActivity
     lateinit var mAddDateImageView: ImageView
     lateinit var mEditDateImageView: ImageView
     lateinit var mDatePickerDialog: DatePickerDialog
+    lateinit var mTimePickerDialog: TimePickerDialog
     lateinit var mAddDateTextView: TextView
     lateinit var mDateTextView: TextView
     lateinit var mPlaceTextView: TextView
     lateinit var mAddPlaceImageView: ImageView
     lateinit var mEditPlaceImageView: ImageView
     lateinit var mAddPlaceTextView: TextView
+    lateinit var mTimeTextView: TextView
+    lateinit var mAddTimeTextView: TextView
+    lateinit var mAddTimeImageView: ImageView
+    lateinit var mEditTimeImageView: ImageView
     lateinit var mAddScheduleButton: Button
     lateinit var mCancelButton: Button
     lateinit var mAddDateRelativeLayout: RelativeLayout
+    lateinit var mAddTimeRelativeLayout: RelativeLayout
     lateinit var mAddPlaceRelativeLayout: RelativeLayout
 
     private lateinit var mScheduleCalendar: Calendar
@@ -64,6 +71,10 @@ class ScheduleAddingActivity
         mDateTextView = tv_date
         mAddPlaceImageView = iv_add_place
         mEditPlaceImageView = iv_edit_place
+        mTimeTextView = tv_time
+        mAddTimeTextView = tv_add_time
+        mAddTimeImageView = iv_add_time
+        mEditTimeImageView = iv_edit_time
         mPlaceTextView = tv_place
         mAddPlaceTextView = tv_add_place
         mAddScheduleButton = btn_add_schedule.apply {
@@ -73,6 +84,9 @@ class ScheduleAddingActivity
             setOnClickListener(this@ScheduleAddingActivity)
         }
         mAddDateRelativeLayout = rl_add_date.apply {
+            setOnClickListener(this@ScheduleAddingActivity)
+        }
+        mAddTimeRelativeLayout = rl_add_time.apply {
             setOnClickListener(this@ScheduleAddingActivity)
         }
         mAddPlaceRelativeLayout = rl_add_place.apply {
@@ -88,6 +102,12 @@ class ScheduleAddingActivity
                 datePicker.minDate = Date().time
             }
         }
+
+        mTimePickerDialog = TimePickerDialog(this,
+            this@ScheduleAddingActivity,
+            Calendar.getInstance().get(Calendar.HOUR_OF_DAY),
+            Calendar.getInstance().get(Calendar.MINUTE),
+            true)
 
         mScheduleCalendar = Calendar.getInstance()
     }
@@ -106,7 +126,27 @@ class ScheduleAddingActivity
         mDateTextView.visibility = View.VISIBLE
 
         mScheduleCalendar.run {
-            set(year, month, dayOfMonth, 11, 11)
+            set(year, month, dayOfMonth)
+        }
+        mScheduleTime = mScheduleCalendar.timeInMillis
+    }
+
+    override fun onTimeSet(view: TimePicker?, hourOfDay: Int, minute: Int) {
+        Log.d(TAG, "onTimeSet()")
+
+        val time: String = "${hourOfDay}시 ${minute}분"
+
+        Log.d(TAG, "time: $time")
+
+        mAddTimeImageView.visibility = View.INVISIBLE
+        mEditTimeImageView.visibility = View.VISIBLE
+        mAddTimeTextView.text = resources.getString(R.string.edit_time)
+        mTimeTextView.text = time
+        mTimeTextView.visibility = View.VISIBLE
+
+        mScheduleCalendar.run {
+            set(Calendar.HOUR_OF_DAY, hourOfDay)
+            set(Calendar.MINUTE, minute)
         }
         mScheduleTime = mScheduleCalendar.timeInMillis
     }
@@ -115,6 +155,9 @@ class ScheduleAddingActivity
         when(v?.id) {
             R.id.rl_add_date -> {
                 mDatePickerDialog.show()
+            }
+            R.id.rl_add_time -> {
+                mTimePickerDialog.show()
             }
             R.id.rl_add_place -> {
                 startActivityForResult(Intent(this, MapsActivity::class.java), REQUEST_CODE)
