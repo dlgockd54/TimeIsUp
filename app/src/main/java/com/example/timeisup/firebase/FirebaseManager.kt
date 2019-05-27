@@ -15,7 +15,7 @@ object FirebaseManager {
     private val mDatabaseReference: DatabaseReference = mFirebaseDatabase.reference
 
     fun addScheduleToDatabase(schedule: Schedule) {
-        mDatabaseReference.child("schedule").setValue(schedule).let {
+        mDatabaseReference.child("schedule").push().setValue(schedule).let {
             it.addOnSuccessListener {
                 Log.d(TAG, "onSuccess()")
             }
