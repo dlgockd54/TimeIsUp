@@ -13,9 +13,12 @@ import java.util.*
 
 class ScheduleListPresenter(private val mView: ScheduleListContract.View)
     : ScheduleListContract.Presenter {
-    private val TAG: String = ScheduleListPresenter::class.java.simpleName
+    companion object {
+        const val DB_NODE_NAME: String = "schedules"
+    }
 
-    private val mScheduleList: LinkedList<Pair<Schedule, Long>> = LinkedList<Pair<Schedule, Long>>()
+    private val TAG: String = ScheduleListPresenter::class.java.simpleName
+    private val mScheduleList: LinkedList<Pair<Schedule, String?>> = LinkedList<Pair<Schedule, String?>>()
     private val mChildEventListener: ChildEventListener = object: ChildEventListener {
         override fun onCancelled(databaseError: DatabaseError) {
             Log.d(TAG, "onCancelled()")
@@ -28,23 +31,27 @@ class ScheduleListPresenter(private val mView: ScheduleListContract.View)
         override fun onChildChanged(dataSnapshot: DataSnapshot, s: String?) {
             Log.d(TAG, "onChildChanged()")
 
-            val isConfirmed: Boolean? = dataSnapshot.child("isConfirmed").getValue(Boolean::class.java)
-            val latitude: Double? = dataSnapshot.child("latitude").getValue(Double::class.java)
-            val longitude: Double? = dataSnapshot.child("longitude").getValue(Double::class.java)
-            val time: Long? = dataSnapshot.child("time").getValue(Long::class.java)
+            val isConfirmed: Boolean? = dataSnapshot.child(DB_NODE_NAME).child("isConfirmed").getValue(Boolean::class.java)
+            val latitude: Double? = dataSnapshot.child(DB_NODE_NAME).child("latitude").getValue(Double::class.java)
+            val longitude: Double? = dataSnapshot.child(DB_NODE_NAME).child("longitude").getValue(Double::class.java)
+            val time: Long? = dataSnapshot.child(DB_NODE_NAME).child("time").getValue(Long::class.java)
+            val key: String? = dataSnapshot.key
 
             Log.d(TAG, "isConfirmed: $isConfirmed")
             Log.d(TAG, "latitude: $latitude")
             Log.d(TAG, "longitude: $longitude")
             Log.d(TAG, "time: $time")
+            Log.d(TAG, "key: $key ")
 
             for(i in 0 until mScheduleList.size) {
                 Log.d(TAG, "i: $i")
 
                 mScheduleList[i].let {
-                    if(it.second == time) {
+                    if(it.second === key) {
                         it.first.let {
-                            it.setTime(time)
+                            time?.run {
+                                it.setTime(time)
+                            }
 
                             latitude?.run {
                                 it.setLatitude(latitude)
@@ -63,14 +70,19 @@ class ScheduleListPresenter(private val mView: ScheduleListContract.View)
             }
         }
 
+        /**
+         * onChildAdded() function shows added child node under "schedules" node.
+         */
         override fun onChildAdded(dataSnapshot: DataSnapshot, s: String?) {
             Log.d(TAG, "onChildAdded()")
 
+            val key: String? = dataSnapshot.key
             val isConfirmed: Boolean? = dataSnapshot.child("isConfirmed").getValue(Boolean::class.java)
             val latitude: Double? = dataSnapshot.child("latitude").getValue(Double::class.java)
             val longitude: Double? = dataSnapshot.child("longitude").getValue(Double::class.java)
             val time: Long? = dataSnapshot.child("time").getValue(Long::class.java)
 
+            Log.d(TAG, "key: $key")
             Log.d(TAG, "isConfirmed: $isConfirmed")
             Log.d(TAG, "latitude: $latitude")
             Log.d(TAG, "longitude: $longitude")
@@ -78,7 +90,7 @@ class ScheduleListPresenter(private val mView: ScheduleListContract.View)
 
             val schedule: Schedule = Schedule(time, latitude, longitude, isConfirmed)
 
-            addSchedule(schedule)
+            addSchedule(schedule, key)
         }
 
         override fun onChildRemoved(dataSnapshot: DataSnapshot) {
@@ -90,17 +102,12 @@ class ScheduleListPresenter(private val mView: ScheduleListContract.View)
         FirebaseManager.addChildEventListener(mChildEventListener)
     }
 
-    override fun getScheduleList(): LinkedList<Pair<Schedule, Long>> {
+    override fun getScheduleList(): LinkedList<Pair<Schedule, String?>> {
         return mScheduleList
     }
 
-    override fun addSchedule(schedule: Schedule) {
-        schedule.getTime()?.let {
-            Log.d(TAG, "soon add schedule to list")
-
-            mScheduleList.add(Pair(schedule, it))
-        }
-
+    override fun addSchedule(schedule: Schedule, key: String?) {
+        mScheduleList.add(Pair(schedule, key))
         mView.refreshAdapter()
     }
 }

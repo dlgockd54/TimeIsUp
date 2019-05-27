@@ -15,7 +15,7 @@ import java.util.*
  * Created by hclee on 2019-05-17.
  */
 
-class ScheduleListAdapter(private var mScheduleList: LinkedList<Pair<Schedule, Long>>, private val mGlideRequestManager: RequestManager)
+class ScheduleListAdapter(private var mScheduleList: LinkedList<Pair<Schedule, String?>>, private val mGlideRequestManager: RequestManager)
     : RecyclerView.Adapter<ScheduleListAdapter.ScheduleViewHolder>() {
     private val TAG: String = ScheduleListAdapter::class.java.simpleName
 
@@ -68,7 +68,7 @@ class ScheduleListAdapter(private var mScheduleList: LinkedList<Pair<Schedule, L
         return ret
     }
 
-    fun replaceScheduleList(scheduleList: LinkedList<Pair<Schedule, Long>>) {
+    fun replaceScheduleList(scheduleList: LinkedList<Pair<Schedule, String?>>) {
         mScheduleList = scheduleList
     }
 

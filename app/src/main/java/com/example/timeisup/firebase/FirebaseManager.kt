@@ -2,6 +2,7 @@ package com.example.timeisup.firebase
 
 import android.util.Log
 import com.example.timeisup.schedule.Schedule
+import com.example.timeisup.schedule.ScheduleListPresenter
 import com.google.firebase.database.*
 
 /**
@@ -15,7 +16,7 @@ object FirebaseManager {
     private val mDatabaseReference: DatabaseReference = mFirebaseDatabase.reference
 
     fun addScheduleToDatabase(schedule: Schedule) {
-        mDatabaseReference.child("schedule").push().setValue(schedule).let {
+        mDatabaseReference.child(ScheduleListPresenter.DB_NODE_NAME).push().setValue(schedule).let {
             it.addOnSuccessListener {
                 Log.d(TAG, "onSuccess()")
             }
@@ -32,10 +33,10 @@ object FirebaseManager {
     }
 
     fun addChildEventListener(listener: ChildEventListener) {
-        mDatabaseReference.addChildEventListener(listener)
+        mDatabaseReference.child(ScheduleListPresenter.DB_NODE_NAME).addChildEventListener(listener)
     }
 
     fun removeChildEventListener(listener: ChildEventListener) {
-        mDatabaseReference.removeEventListener(listener)
+        mDatabaseReference.child(ScheduleListPresenter.DB_NODE_NAME).removeEventListener(listener)
     }
 }

@@ -14,7 +14,7 @@ interface ScheduleListContract {
     }
 
     interface Presenter: BasePresenter {
-        fun getScheduleList(): LinkedList<Pair<Schedule, Long>>
-        fun addSchedule(schedule: Schedule)
+        fun getScheduleList(): LinkedList<Pair<Schedule, String?>>
+        fun addSchedule(schedule: Schedule, key: String?)
     }
 }
