@@ -66,7 +66,9 @@ class ScheduleAddingActivity
         init()
 
         intent?.let {
-            setAsPredefinedSchedule(it)
+            if(it.hasExtra(ScheduleListAdapter.SCHEDULE_EXTRA)) {
+                setAsPredefinedSchedule(it)
+            }
         }
     }
 
