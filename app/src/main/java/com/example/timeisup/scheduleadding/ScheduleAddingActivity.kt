@@ -167,6 +167,8 @@ class ScheduleAddingActivity
         mAddPlaceTextView.text = resources.getString(R.string.edit_place)
         mPlaceTextView.text = placeName
         mPlaceTextView.visibility = View.VISIBLE
+
+        mAddScheduleButton.text = resources.getString(R.string.edit_schedule)
     }
 
     override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
