@@ -126,9 +126,10 @@ class ScheduleAddingActivity
 
         val extrasArray: Array<Any?> = (intent.getSerializableExtra(ScheduleListAdapter.SCHEDULE_EXTRA) as Array<Any?>)
         val time: Long = extrasArray[0] as Long
-        val latitude: Double = extrasArray[1] as Double
-        val longitude: Double = extrasArray[2] as Double
-        val isConfirmed: Boolean = extrasArray[3] as Boolean
+        val placeName: String = extrasArray[1] as String
+        val latitude: Double = extrasArray[2] as Double
+        val longitude: Double = extrasArray[3] as Double
+        val isConfirmed: Boolean = extrasArray[4] as Boolean
         var year: Int
         var month: Int
         var day: Int
@@ -160,6 +161,12 @@ class ScheduleAddingActivity
         mAddTimeTextView.text = resources.getString(R.string.edit_time)
         mTimeTextView.text = timeText
         mTimeTextView.visibility = View.VISIBLE
+
+        mAddPlaceImageView.visibility = View.INVISIBLE
+        mEditPlaceImageView.visibility = View.VISIBLE
+        mAddPlaceTextView.text = resources.getString(R.string.edit_place)
+        mPlaceTextView.text = placeName
+        mPlaceTextView.visibility = View.VISIBLE
     }
 
     override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
@@ -215,8 +222,8 @@ class ScheduleAddingActivity
             R.id.btn_add_schedule -> {
                 var schedule: Schedule = Schedule()
 
-                mSchedulePlace.latLng?.let {
-                    schedule = Schedule(mScheduleTime, it.latitude, it.longitude, false)
+                mSchedulePlace.let {
+                    schedule = Schedule(mScheduleTime, it.name, it.latLng?.latitude, it.latLng?.longitude, false)
                 }
 
                 mPresenter.addScheduleToDatabase(schedule)

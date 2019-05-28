@@ -45,6 +45,7 @@ class ScheduleListAdapter(private val mActivity: ScheduleListActivity, private v
                 it.itemView.setOnClickListener {
                     val schedule: Schedule = mScheduleList[position].first
                     val extrasArray: Array<Any?> = arrayOf(schedule.getTime(),
+                        schedule.getPlaceName(),
                         schedule.getLatitude(),
                         schedule.getLongitude(),
                         schedule.getIsConfirmed())
