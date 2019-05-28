@@ -40,6 +40,21 @@ object FirebaseManager {
         }
     }
 
+    fun rescheduleFromDatabase(key: String, schedule: Schedule) {
+        Log.d(TAG, "editScheduleFromDatabase()")
+
+        val map: HashMap<String, Any> = HashMap<String, Any>().apply {
+            put(key, schedule)
+        }
+
+        mDatabaseReference.child(ScheduleListPresenter.DB_NODE_NAME).updateChildren(map).let {
+            it.addOnSuccessListener(onSuccessListener)
+            it.addOnFailureListener(onFailureListener)
+            it.addOnCompleteListener(onCompleteListener)
+            it.addOnCanceledListener(onCanceledListener)
+        }
+    }
+
     fun removeScheduleFromDatabase(key: String) {
         Log.d(TAG, "removeScheduleFromDatabase()")
         Log.d(TAG, "key: $key")

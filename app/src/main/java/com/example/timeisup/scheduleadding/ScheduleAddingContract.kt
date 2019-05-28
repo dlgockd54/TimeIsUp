@@ -15,5 +15,6 @@ interface ScheduleAddingContract {
 
     interface Presenter: BasePresenter {
         fun addScheduleToDatabase(schedule: Schedule)
+        fun reschedule(key: String, schedule: Schedule)
     }
 }

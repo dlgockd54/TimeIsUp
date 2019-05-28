@@ -13,9 +13,11 @@ import android.widget.*
 import android.widget.Toast.*
 import com.example.timeisup.BaseActivity
 import com.example.timeisup.R
+import com.example.timeisup.firebase.FirebaseManager
 import com.example.timeisup.googlemap.MapsActivity
 import com.example.timeisup.schedule.Schedule
 import com.example.timeisup.schedule.ScheduleListAdapter
+import com.google.android.gms.maps.model.LatLng
 import com.google.android.libraries.places.api.model.Place
 import kotlinx.android.synthetic.main.activity_schedule_adding.*
 import java.util.*
@@ -46,6 +48,7 @@ class ScheduleAddingActivity
     lateinit var mEditTimeImageView: ImageView
     lateinit var mAddScheduleButton: Button
     lateinit var mCancelButton: Button
+    lateinit var mEditScheduleButton: Button
     lateinit var mAddDateRelativeLayout: RelativeLayout
     lateinit var mAddTimeRelativeLayout: RelativeLayout
     lateinit var mAddPlaceRelativeLayout: RelativeLayout
@@ -88,6 +91,9 @@ class ScheduleAddingActivity
         mPlaceTextView = tv_place
         mAddPlaceTextView = tv_add_place
         mAddScheduleButton = btn_add_schedule.apply {
+            setOnClickListener(this@ScheduleAddingActivity)
+        }
+        mEditScheduleButton = btn_edit_schedule.apply {
             setOnClickListener(this@ScheduleAddingActivity)
         }
         mCancelButton = btn_cancel.apply {
@@ -149,6 +155,7 @@ class ScheduleAddingActivity
             minute = it.get(Calendar.MINUTE)
             mDatePickerDialog.updateDate(year, month, day)
             mTimePickerDialog.updateTime(hour, minute)
+            mScheduleTime = mScheduleCalendar.timeInMillis
             dateText = "${year}년 ${month + 1}월 ${day}일"
             timeText = "${hour}시 ${minute}분"
         }
@@ -170,7 +177,11 @@ class ScheduleAddingActivity
         mPlaceTextView.text = placeName
         mPlaceTextView.visibility = View.VISIBLE
 
-        mAddScheduleButton.text = resources.getString(R.string.edit_schedule)
+        mSchedulePlace = ExtendedPlace(placeName, LatLng(latitude, longitude))
+
+        mAddScheduleButton.visibility = View.GONE
+        mEditScheduleButton.visibility = View.VISIBLE
+
         mScheduleKey = key
     }
 
@@ -232,6 +243,13 @@ class ScheduleAddingActivity
                 }
 
                 mPresenter.addScheduleToDatabase(schedule)
+                onBackPressed()
+            }
+            R.id.btn_edit_schedule -> {
+                val schedule: Schedule = Schedule(mScheduleTime, mSchedulePlace.name,
+                    mSchedulePlace.latLng?.latitude, mSchedulePlace.latLng?.longitude, false)
+
+                mPresenter.reschedule(mScheduleKey, schedule)
                 onBackPressed()
             }
             R.id.btn_cancel -> {

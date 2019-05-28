@@ -31,45 +31,47 @@ class ScheduleListPresenter(private val mView: ScheduleListContract.View)
         override fun onChildChanged(dataSnapshot: DataSnapshot, s: String?) {
             Log.d(TAG, "onChildChanged()")
 
-            val isConfirmed: Boolean? = dataSnapshot.child(DB_NODE_NAME).child("isConfirmed").getValue(Boolean::class.java)
-            val latitude: Double? = dataSnapshot.child(DB_NODE_NAME).child("latitude").getValue(Double::class.java)
-            val longitude: Double? = dataSnapshot.child(DB_NODE_NAME).child("longitude").getValue(Double::class.java)
-            val time: Long? = dataSnapshot.child(DB_NODE_NAME).child("time").getValue(Long::class.java)
-            val placeName: String? = dataSnapshot.child(DB_NODE_NAME).child("placeName").getValue(String::class.java)
-            val key: String? = dataSnapshot.key
+            onRescheduledFromDatabase(dataSnapshot)
 
-            Log.d(TAG, "isConfirmed: $isConfirmed")
-            Log.d(TAG, "latitude: $latitude")
-            Log.d(TAG, "longitude: $longitude")
-            Log.d(TAG, "time: $time")
-            Log.d(TAG, "placeName: $placeName")
-            Log.d(TAG, "key: $key ")
-
-            for(i in 0 until mScheduleList.size) {
-                Log.d(TAG, "i: $i")
-
-                mScheduleList[i].let {
-                    if(it.second === key) {
-                        it.first.let {
-                            time?.run {
-                                it.setTime(time)
-                            }
-                            placeName?.run {
-                                it.setPlaceName(placeName)
-                            }
-                            latitude?.run {
-                                it.setLatitude(latitude)
-                            }
-                            longitude?.run {
-                                it.setLongitude(longitude)
-                            }
-                            isConfirmed?.run {
-                                it.setIsConfirmed(isConfirmed)
-                            }
-                        }
-                    }
-                }
-            }
+//            val key: String? = dataSnapshot.key
+//            val isConfirmed: Boolean? = dataSnapshot.child(DB_NODE_NAME).child("isConfirmed").getValue(Boolean::class.java)
+//            val latitude: Double? = dataSnapshot.child(DB_NODE_NAME).child("latitude").getValue(Double::class.java)
+//            val longitude: Double? = dataSnapshot.child(DB_NODE_NAME).child("longitude").getValue(Double::class.java)
+//            val time: Long? = dataSnapshot.child(DB_NODE_NAME).child("time").getValue(Long::class.java)
+//            val placeName: String? = dataSnapshot.child(DB_NODE_NAME).child("placeName").getValue(String::class.java)
+//
+//            Log.d(TAG, "isConfirmed: $isConfirmed")
+//            Log.d(TAG, "latitude: $latitude")
+//            Log.d(TAG, "longitude: $longitude")
+//            Log.d(TAG, "time: $time")
+//            Log.d(TAG, "placeName: $placeName")
+//            Log.d(TAG, "key: $key ")
+//
+//            for(i in 0 until mScheduleList.size) {
+//                Log.d(TAG, "i: $i")
+//
+//                mScheduleList[i].let {
+//                    if(it.second === key) {
+//                        it.first.let {
+//                            time?.run {
+//                                it.setTime(time)
+//                            }
+//                            placeName?.run {
+//                                it.setPlaceName(placeName)
+//                            }
+//                            latitude?.run {
+//                                it.setLatitude(latitude)
+//                            }
+//                            longitude?.run {
+//                                it.setLongitude(longitude)
+//                            }
+//                            isConfirmed?.run {
+//                                it.setIsConfirmed(isConfirmed)
+//                            }
+//                        }
+//                    }
+//                }
+//            }
         }
 
         /**
@@ -140,5 +142,53 @@ class ScheduleListPresenter(private val mView: ScheduleListContract.View)
         }
 
         mView.refreshAdapter()
+    }
+
+    private fun onRescheduledFromDatabase(dataSnapshot: DataSnapshot) {
+        Log.d(TAG, "onScheduleChangedFromDatabase()")
+
+        val key: String? = dataSnapshot.key
+        val isConfirmed: Boolean? = dataSnapshot.child("isConfirmed").getValue(Boolean::class.java)
+        val latitude: Double? = dataSnapshot.child("latitude").getValue(Double::class.java)
+        val longitude: Double? = dataSnapshot.child("longitude").getValue(Double::class.java)
+        val time: Long? = dataSnapshot.child("time").getValue(Long::class.java)
+        val placeName: String? = dataSnapshot.child("placeName").getValue(String::class.java)
+
+        Log.d(TAG, "isConfirmed: $isConfirmed")
+        Log.d(TAG, "latitude: $latitude")
+        Log.d(TAG, "longitude: $longitude")
+        Log.d(TAG, "time: $time")
+        Log.d(TAG, "placeName: $placeName")
+        Log.d(TAG, "key: $key ")
+
+        for(i in 0 until mScheduleList.size) {
+            Log.d(TAG, "i: $i, key: ${mScheduleList[i].second}")
+
+            mScheduleList[i].let {
+                if(it.second == key) {
+                    it.first.let {
+                        time?.run {
+                            it.setTime(time)
+                        }
+                        placeName?.run {
+                            it.setPlaceName(placeName)
+                        }
+                        latitude?.run {
+                            it.setLatitude(latitude)
+                        }
+                        longitude?.run {
+                            it.setLongitude(longitude)
+                        }
+                        isConfirmed?.run {
+                            it.setIsConfirmed(isConfirmed)
+                        }
+                    }
+
+                    mView.refreshAdapter()
+
+                    return
+                }
+            }
+        }
     }
 }

@@ -17,4 +17,10 @@ class ScheduleAddingPresenter(private val mView: ScheduleAddingContract.View)
 
         FirebaseManager.addScheduleToDatabase(schedule)
     }
+
+    override fun reschedule(key: String, schedule: Schedule) {
+        Log.d(TAG, "editSchedule()")
+
+        FirebaseManager.rescheduleFromDatabase(key, schedule)
+    }
 }
