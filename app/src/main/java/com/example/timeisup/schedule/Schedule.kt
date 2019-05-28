@@ -1,7 +1,5 @@
 package com.example.timeisup.schedule
 
-import com.google.android.gms.maps.model.LatLng
-
 /**
  * Created by hclee on 2019-05-17.
  */

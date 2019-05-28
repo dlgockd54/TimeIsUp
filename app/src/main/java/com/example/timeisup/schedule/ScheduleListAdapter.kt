@@ -1,5 +1,6 @@
 package com.example.timeisup.schedule
 
+import android.content.Intent
 import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.LayoutInflater
@@ -15,8 +16,12 @@ import java.util.*
  * Created by hclee on 2019-05-17.
  */
 
-class ScheduleListAdapter(private var mScheduleList: LinkedList<Pair<Schedule, String?>>, private val mGlideRequestManager: RequestManager)
-    : RecyclerView.Adapter<ScheduleListAdapter.ScheduleViewHolder>() {
+class ScheduleListAdapter(private val mActivity: ScheduleListActivity, private var mScheduleList: LinkedList<Pair<Schedule,
+        String?>>, private val mGlideRequestManager: RequestManager): RecyclerView.Adapter<ScheduleListAdapter.ScheduleViewHolder>() {
+    companion object {
+        const val SCHEDULE_EXTRA: String = "com.example.timeisup.schedule_extra"
+    }
+
     private val TAG: String = ScheduleListAdapter::class.java.simpleName
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ScheduleViewHolder {
@@ -36,6 +41,21 @@ class ScheduleListAdapter(private var mScheduleList: LinkedList<Pair<Schedule, S
         Log.d(TAG, "onBindViewHolder()")
 
         holder.let {
+            if(!(it.itemView.hasOnClickListeners())) {
+                it.itemView.setOnClickListener {
+                    val schedule: Schedule = mScheduleList[position].first
+                    val extrasArray: Array<Any?> = arrayOf(schedule.getTime(),
+                        schedule.getLatitude(),
+                        schedule.getLongitude(),
+                        schedule.getIsConfirmed())
+                    val intent: Intent = Intent().apply {
+                        putExtra(SCHEDULE_EXTRA, extrasArray)
+                    }
+
+                    mActivity.startScheduleAddingActivityToEditSchedule(intent)
+                }
+            }
+
             mGlideRequestManager.load(R.raw.schedule_icon)
                 .into(it.mScheduleImageView)
 

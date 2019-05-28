@@ -1,5 +1,6 @@
 package com.example.timeisup.schedule
 
+import android.content.ComponentName
 import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
@@ -14,7 +15,6 @@ import com.example.timeisup.BaseActivity
 import com.example.timeisup.R
 import com.example.timeisup.scheduleadding.ScheduleAddingActivity
 import kotlinx.android.synthetic.main.activity_schedule_list.*
-import java.util.*
 
 class ScheduleListActivity : BaseActivity(), ScheduleListContract.View, View.OnClickListener {
     private val TAG: String = ScheduleListActivity::class.java.simpleName
@@ -65,10 +65,17 @@ class ScheduleListActivity : BaseActivity(), ScheduleListContract.View, View.OnC
         }
     }
 
+    fun startScheduleAddingActivityToEditSchedule(intent: Intent) {
+        intent.component = ComponentName(this, ScheduleAddingActivity::class.java)
+
+        startActivity(intent)
+        overridePendingTransition(R.anim.animation_slide_from_right, R.anim.animation_slide_to_left)
+    }
+
     private fun initAdapter() {
         Log.d(TAG, "initAdapter()")
 
-        mAdapter = ScheduleListAdapter(mPresenter.getScheduleList(), mGlideRequestManager)
+        mAdapter = ScheduleListAdapter(this, mPresenter.getScheduleList(), mGlideRequestManager)
         mRecyclerView.adapter = mAdapter
     }
 

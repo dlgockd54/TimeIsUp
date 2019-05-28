@@ -15,6 +15,7 @@ import com.example.timeisup.BaseActivity
 import com.example.timeisup.R
 import com.example.timeisup.googlemap.MapsActivity
 import com.example.timeisup.schedule.Schedule
+import com.example.timeisup.schedule.ScheduleListAdapter
 import com.google.android.libraries.places.api.model.Place
 import kotlinx.android.synthetic.main.activity_schedule_adding.*
 import java.util.*
@@ -60,7 +61,13 @@ class ScheduleAddingActivity
 
         Log.d(TAG, "onCreate()")
 
+        val intent: Intent? = intent
+
         init()
+
+        intent?.let {
+            setAsPredefinedSchedule(it)
+        }
     }
 
     private fun init() {
@@ -110,6 +117,47 @@ class ScheduleAddingActivity
             true)
 
         mScheduleCalendar = Calendar.getInstance()
+    }
+
+    private fun setAsPredefinedSchedule(intent: Intent) {
+        Log.d(TAG, "setAsPredefinedSchedule()")
+
+        val extrasArray: Array<Any?> = (intent.getSerializableExtra(ScheduleListAdapter.SCHEDULE_EXTRA) as Array<Any?>)
+        val time: Long = extrasArray[0] as Long
+        val latitude: Double = extrasArray[1] as Double
+        val longitude: Double = extrasArray[2] as Double
+        val isConfirmed: Boolean = extrasArray[3] as Boolean
+        var year: Int
+        var month: Int
+        var day: Int
+        var hour: Int
+        var minute: Int
+        var dateText: String = ""
+        var timeText: String = ""
+
+        mScheduleCalendar.let {
+            it.timeInMillis = time
+            year = it.get(Calendar.YEAR)
+            month = it.get(Calendar.MONTH)
+            day = it.get(Calendar.DAY_OF_MONTH)
+            hour = it.get(Calendar.HOUR_OF_DAY)
+            minute = it.get(Calendar.MINUTE)
+            mDatePickerDialog.updateDate(year, month, day)
+            mTimePickerDialog.updateTime(hour, minute)
+            dateText = "${year}년 ${month + 1}월 ${day}일"
+            timeText = "${hour}시 ${minute}분"
+        }
+        mAddDateImageView.visibility = View.INVISIBLE
+        mEditDateImageView.visibility = View.VISIBLE
+        mAddDateTextView.text = resources.getString(R.string.edit_date)
+        mDateTextView.text = dateText
+        mDateTextView.visibility = View.VISIBLE
+
+        mAddTimeImageView.visibility = View.INVISIBLE
+        mEditTimeImageView.visibility = View.VISIBLE
+        mAddTimeTextView.text = resources.getString(R.string.edit_time)
+        mTimeTextView.text = timeText
+        mTimeTextView.visibility = View.VISIBLE
     }
 
     override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
