@@ -57,6 +57,18 @@ class ScheduleListAdapter(private val mActivity: ScheduleListActivity, private v
                 }
             }
 
+            it.itemView.setOnLongClickListener(object: View.OnLongClickListener {
+                override fun onLongClick(v: View?): Boolean {
+                    Log.d(TAG, "onLongClick()")
+
+                    val key: String? = mScheduleList[position].second
+
+                    mActivity.removeSchedule(key)
+
+                    return true
+                }
+            })
+
             mGlideRequestManager.load(R.raw.schedule_icon)
                 .into(it.mScheduleImageView)
 

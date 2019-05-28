@@ -16,5 +16,6 @@ interface ScheduleListContract {
     interface Presenter: BasePresenter {
         fun getScheduleList(): LinkedList<Pair<Schedule, String?>>
         fun addSchedule(schedule: Schedule, key: String?)
+        fun removeScheduleFromDatabase(key: String?)
     }
 }

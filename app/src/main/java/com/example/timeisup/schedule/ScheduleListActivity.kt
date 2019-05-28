@@ -79,6 +79,12 @@ class ScheduleListActivity : BaseActivity(), ScheduleListContract.View, View.OnC
         mRecyclerView.adapter = mAdapter
     }
 
+    fun removeSchedule(key: String?) {
+        Log.d(TAG, "removeSchedule()")
+
+        mPresenter.removeScheduleFromDatabase(key)
+    }
+
     override fun refreshAdapter() {
         Log.d(TAG, "refreshAdapter()")
 

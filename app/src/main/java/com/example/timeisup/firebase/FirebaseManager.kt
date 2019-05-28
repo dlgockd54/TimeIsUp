@@ -32,6 +32,13 @@ object FirebaseManager {
         }
     }
 
+    fun removeScheduleFromDatabase(key: String) {
+        Log.d(TAG, "removeScheduleFromDatabase()")
+        Log.d(TAG, "key: $key")
+
+        mDatabaseReference.child(ScheduleListPresenter.DB_NODE_NAME).child(key).removeValue()
+    }
+
     fun addChildEventListener(listener: ChildEventListener) {
         mDatabaseReference.child(ScheduleListPresenter.DB_NODE_NAME).addChildEventListener(listener)
     }

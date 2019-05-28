@@ -99,6 +99,10 @@ class ScheduleListPresenter(private val mView: ScheduleListContract.View)
 
         override fun onChildRemoved(dataSnapshot: DataSnapshot) {
             Log.d(TAG, "onChildRemoved()")
+
+            val key: String? = dataSnapshot.key
+
+            onScheduleRemovedFromDatabase(key)
         }
     }
 
@@ -112,6 +116,29 @@ class ScheduleListPresenter(private val mView: ScheduleListContract.View)
 
     override fun addSchedule(schedule: Schedule, key: String?) {
         mScheduleList.add(Pair(schedule, key))
+        mView.refreshAdapter()
+    }
+
+    override fun removeScheduleFromDatabase(key: String?) {
+        Log.d(TAG, "removeSchedule()")
+
+        key?.let {
+            FirebaseManager.removeScheduleFromDatabase(it)
+        }
+    }
+
+    private fun onScheduleRemovedFromDatabase(key: String?) {
+        Log.d(TAG, "removeScheduleFromList()")
+        Log.d(TAG, "key: $key")
+
+        for(i in 0 until mScheduleList.size) {
+            if(mScheduleList[i].second == key) {
+                Log.d(TAG, "remove schedule at index $i")
+
+                mScheduleList.removeAt(i)
+            }
+        }
+
         mView.refreshAdapter()
     }
 }
