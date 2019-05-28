@@ -32,46 +32,6 @@ class ScheduleListPresenter(private val mView: ScheduleListContract.View)
             Log.d(TAG, "onChildChanged()")
 
             onRescheduledFromDatabase(dataSnapshot)
-
-//            val key: String? = dataSnapshot.key
-//            val isConfirmed: Boolean? = dataSnapshot.child(DB_NODE_NAME).child("isConfirmed").getValue(Boolean::class.java)
-//            val latitude: Double? = dataSnapshot.child(DB_NODE_NAME).child("latitude").getValue(Double::class.java)
-//            val longitude: Double? = dataSnapshot.child(DB_NODE_NAME).child("longitude").getValue(Double::class.java)
-//            val time: Long? = dataSnapshot.child(DB_NODE_NAME).child("time").getValue(Long::class.java)
-//            val placeName: String? = dataSnapshot.child(DB_NODE_NAME).child("placeName").getValue(String::class.java)
-//
-//            Log.d(TAG, "isConfirmed: $isConfirmed")
-//            Log.d(TAG, "latitude: $latitude")
-//            Log.d(TAG, "longitude: $longitude")
-//            Log.d(TAG, "time: $time")
-//            Log.d(TAG, "placeName: $placeName")
-//            Log.d(TAG, "key: $key ")
-//
-//            for(i in 0 until mScheduleList.size) {
-//                Log.d(TAG, "i: $i")
-//
-//                mScheduleList[i].let {
-//                    if(it.second === key) {
-//                        it.first.let {
-//                            time?.run {
-//                                it.setTime(time)
-//                            }
-//                            placeName?.run {
-//                                it.setPlaceName(placeName)
-//                            }
-//                            latitude?.run {
-//                                it.setLatitude(latitude)
-//                            }
-//                            longitude?.run {
-//                                it.setLongitude(longitude)
-//                            }
-//                            isConfirmed?.run {
-//                                it.setIsConfirmed(isConfirmed)
-//                            }
-//                        }
-//                    }
-//                }
-//            }
         }
 
         /**
