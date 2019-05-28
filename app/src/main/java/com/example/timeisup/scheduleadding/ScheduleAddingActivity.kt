@@ -227,8 +227,6 @@ class ScheduleAddingActivity
                 }
 
                 mPresenter.addScheduleToDatabase(schedule)
-
-                Thread.sleep(1000)
                 onBackPressed()
             }
             R.id.btn_cancel -> {
