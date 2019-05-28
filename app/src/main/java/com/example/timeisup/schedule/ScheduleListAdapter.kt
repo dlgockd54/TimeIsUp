@@ -44,11 +44,13 @@ class ScheduleListAdapter(private val mActivity: ScheduleListActivity, private v
             if(!(it.itemView.hasOnClickListeners())) {
                 it.itemView.setOnClickListener {
                     val schedule: Schedule = mScheduleList[position].first
+                    val key: String? = mScheduleList[position].second
                     val extrasArray: Array<Any?> = arrayOf(schedule.getTime(),
                         schedule.getPlaceName(),
                         schedule.getLatitude(),
                         schedule.getLongitude(),
-                        schedule.getIsConfirmed())
+                        schedule.getIsConfirmed(),
+                        key)
                     val intent: Intent = Intent().apply {
                         putExtra(SCHEDULE_EXTRA, extrasArray)
                     }

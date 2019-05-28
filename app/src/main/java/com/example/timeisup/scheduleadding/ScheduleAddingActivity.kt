@@ -53,6 +53,7 @@ class ScheduleAddingActivity
     private lateinit var mScheduleCalendar: Calendar
     private var mScheduleTime: Long = 0
     private lateinit var mSchedulePlace: Place
+    private lateinit var mScheduleKey: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -130,6 +131,7 @@ class ScheduleAddingActivity
         val latitude: Double = extrasArray[2] as Double
         val longitude: Double = extrasArray[3] as Double
         val isConfirmed: Boolean = extrasArray[4] as Boolean
+        val key: String = extrasArray[5] as String
         var year: Int
         var month: Int
         var day: Int
@@ -169,6 +171,7 @@ class ScheduleAddingActivity
         mPlaceTextView.visibility = View.VISIBLE
 
         mAddScheduleButton.text = resources.getString(R.string.edit_schedule)
+        mScheduleKey = key
     }
 
     override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
