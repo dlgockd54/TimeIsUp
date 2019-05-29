@@ -41,9 +41,10 @@ class ScheduleListAdapter(private val mActivity: ScheduleListActivity, private v
         Log.d(TAG, "onBindViewHolder()")
 
         holder.let {
+            val schedule: Schedule = mScheduleList[position].first
+
             if(!(it.itemView.hasOnClickListeners())) {
                 it.itemView.setOnClickListener {
-                    val schedule: Schedule = mScheduleList[position].first
                     val key: String? = mScheduleList[position].second
                     val extrasArray: Array<Any?> = arrayOf(schedule.getTime(),
                         schedule.getPlaceName(),
@@ -75,31 +76,23 @@ class ScheduleListAdapter(private val mActivity: ScheduleListActivity, private v
             mGlideRequestManager.load(R.raw.schedule_icon)
                 .into(it.mScheduleImageView)
 
-            val calendar: Calendar = Calendar.getInstance().apply {
-                mScheduleList[position].first.getTime()?.let {
-                    timeInMillis = it
-
-                    Log.d(TAG, "timeInMillis: $it")
-                }
-            }
-
-            Log.d(TAG, "${calendar.get(Calendar.YEAR) - 2000}")
-            Log.d(TAG, "${calendar.get(Calendar.MONTH) + 1}")
-            Log.d(TAG, "${calendar.get(Calendar.DAY_OF_MONTH)}")
-            Log.d(TAG, "${calendar.get(Calendar.HOUR_OF_DAY)}")
-            Log.d(TAG, "${calendar.get(Calendar.MINUTE)}")
-
-            it.mScheduleTextView.text = setScheduleTextView(calendar)
+            it.mScheduleNameTextView.text = schedule.getScheduleName()
+            it.mScheduleDescriptionTextView.text = setScheduleDescriptionTextView(schedule)
         }
     }
 
-    private fun setScheduleTextView(calendar: Calendar): CharSequence {
-        val year: Int = calendar.get(Calendar.YEAR) - 2000
+    private fun setScheduleDescriptionTextView(schedule: Schedule): CharSequence {
+        val calendar: Calendar = Calendar.getInstance().apply {
+            schedule.getTime()?.let {
+                timeInMillis = it
+            }
+        }
+        val placeName: String? = schedule.getPlaceName()
         val month: Int = calendar.get(Calendar.MONTH) + 1
         val dayOfMonth: Int = calendar.get(Calendar.DAY_OF_MONTH)
         val hour: Int = calendar.get(Calendar.HOUR_OF_DAY)
         val minute: Int = calendar.get(Calendar.MINUTE)
-        val ret: String = "${year}년 ${month}월 ${dayOfMonth}일 ${hour}시 ${minute}분"
+        val ret: String = "${placeName}에서 ${month}월 ${dayOfMonth}일 ${hour}시 ${minute}분"
 
         return ret
     }
@@ -110,6 +103,7 @@ class ScheduleListAdapter(private val mActivity: ScheduleListActivity, private v
 
     class ScheduleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val mScheduleImageView: ImageView = itemView.findViewById(R.id.iv_schedule)
-        val mScheduleTextView: TextView = itemView.findViewById(R.id.tv_schedule)
+        val mScheduleNameTextView: TextView = itemView.findViewById(R.id.tv_schedule_name)
+        val mScheduleDescriptionTextView: TextView = itemView.findViewById(R.id.tv_schedule_description)
     }
 }
