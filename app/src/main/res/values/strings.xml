@@ -4,8 +4,8 @@
     <string name="edit_date">날짜 변경</string>
     <string name="add_time">시간 설정</string>
     <string name="edit_time">시간 변경</string>
-    <string name="add_place">장소 설정</string>
-    <string name="edit_place">장소 변경</string>
+    <string name="add_place">위치 설정</string>
+    <string name="edit_place">위치 변경</string>
     <string name="title_activity_maps">Map</string>
     <string name="add_schedule">일정 추가</string>
     <string name="edit_schedule">일정 변경</string>
