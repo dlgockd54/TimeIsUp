@@ -1,6 +1,7 @@
 package com.example.timeisup.schedule
 
 import android.content.Intent
+import android.os.Build
 import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.LayoutInflater
@@ -78,6 +79,19 @@ class ScheduleListAdapter(private val mActivity: ScheduleListActivity, private v
 
             it.mScheduleNameTextView.text = schedule.getScheduleName()
             it.mScheduleDescriptionTextView.text = setScheduleDescriptionTextView(schedule)
+
+            schedule.getIsConfirmed()?.run {
+                if(this) {
+                    if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        it.itemView.background = mActivity.resources.getDrawable(R.color.colorPrimary, null)
+                    }
+                }
+                else {
+                    if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        it.itemView.background = null // Remove the background
+                    }
+                }
+            }
         }
     }
 
