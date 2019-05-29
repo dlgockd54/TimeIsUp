@@ -4,6 +4,7 @@ import android.content.ComponentName
 import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
+import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.Toolbar
@@ -26,6 +27,7 @@ class ScheduleListActivity : BaseActivity(), ScheduleListContract.View, View.OnC
     lateinit var mLayoutManager: RecyclerView.LayoutManager
     lateinit var mGlideRequestManager: RequestManager
     lateinit var mFloatingAction: FloatingActionButton
+    lateinit var mDividerItemDecoration: DividerItemDecoration
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,9 +44,11 @@ class ScheduleListActivity : BaseActivity(), ScheduleListContract.View, View.OnC
         mLayoutManager = LinearLayoutManager(this).apply {
             orientation = LinearLayoutManager.VERTICAL
         }
+        mDividerItemDecoration = DividerItemDecoration(this, LinearLayoutManager(this).orientation)
         mRecyclerView = rv_schedule_list.apply {
             setHasFixedSize(true)
             layoutManager = mLayoutManager
+            addItemDecoration(mDividerItemDecoration)
         }
         mGlideRequestManager = Glide.with(this)
         mFloatingAction = (fab_schedule_list as FloatingActionButton).apply {
