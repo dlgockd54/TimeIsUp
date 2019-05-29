@@ -41,6 +41,7 @@ class ScheduleListPresenter(private val mView: ScheduleListContract.View)
             Log.d(TAG, "onChildAdded()")
 
             val key: String? = dataSnapshot.key
+            val scheduleName: String? = dataSnapshot.child("scheduleName").getValue(String::class.java)
             val isConfirmed: Boolean? = dataSnapshot.child("isConfirmed").getValue(Boolean::class.java)
             val latitude: Double? = dataSnapshot.child("latitude").getValue(Double::class.java)
             val longitude: Double? = dataSnapshot.child("longitude").getValue(Double::class.java)
@@ -48,13 +49,14 @@ class ScheduleListPresenter(private val mView: ScheduleListContract.View)
             val placeName: String? = dataSnapshot.child("placeName").getValue(String::class.java)
 
             Log.d(TAG, "key: $key")
+            Log.d(TAG, "scheduleName: $scheduleName")
             Log.d(TAG, "isConfirmed: $isConfirmed")
             Log.d(TAG, "latitude: $latitude")
             Log.d(TAG, "longitude: $longitude")
             Log.d(TAG, "time: $time")
             Log.d(TAG, "placeName: $placeName")
 
-            val schedule: Schedule = Schedule(time, placeName, latitude, longitude, isConfirmed)
+            val schedule: Schedule = Schedule(scheduleName, time, placeName, latitude, longitude, isConfirmed)
 
             addSchedule(schedule, key)
         }
@@ -108,12 +110,14 @@ class ScheduleListPresenter(private val mView: ScheduleListContract.View)
         Log.d(TAG, "onScheduleChangedFromDatabase()")
 
         val key: String? = dataSnapshot.key
+        val scheduleName: String? = dataSnapshot.child("scheduleName").getValue(String::class.java)
         val isConfirmed: Boolean? = dataSnapshot.child("isConfirmed").getValue(Boolean::class.java)
         val latitude: Double? = dataSnapshot.child("latitude").getValue(Double::class.java)
         val longitude: Double? = dataSnapshot.child("longitude").getValue(Double::class.java)
         val time: Long? = dataSnapshot.child("time").getValue(Long::class.java)
         val placeName: String? = dataSnapshot.child("placeName").getValue(String::class.java)
 
+        Log.d(TAG, "scheduleName: $scheduleName")
         Log.d(TAG, "isConfirmed: $isConfirmed")
         Log.d(TAG, "latitude: $latitude")
         Log.d(TAG, "longitude: $longitude")
@@ -127,6 +131,9 @@ class ScheduleListPresenter(private val mView: ScheduleListContract.View)
             mScheduleList[i].let {
                 if(it.second == key) {
                     it.first.let {
+                        scheduleName?.run {
+                            it.setScheduleName(scheduleName)
+                        }
                         time?.run {
                             it.setTime(time)
                         }

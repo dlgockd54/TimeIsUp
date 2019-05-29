@@ -50,6 +50,7 @@ class ScheduleListAdapter(private val mActivity: ScheduleListActivity, private v
                         schedule.getLatitude(),
                         schedule.getLongitude(),
                         schedule.getIsConfirmed(),
+                        schedule.getScheduleName(),
                         key)
                     val intent: Intent = Intent().apply {
                         putExtra(SCHEDULE_EXTRA, extrasArray)

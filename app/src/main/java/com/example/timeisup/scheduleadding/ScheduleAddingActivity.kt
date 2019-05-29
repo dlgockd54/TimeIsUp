@@ -7,13 +7,12 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.support.v7.widget.Toolbar
+import android.text.SpannableStringBuilder
 import android.util.Log
 import android.view.View
 import android.widget.*
-import android.widget.Toast.*
 import com.example.timeisup.BaseActivity
 import com.example.timeisup.R
-import com.example.timeisup.firebase.FirebaseManager
 import com.example.timeisup.googlemap.MapsActivity
 import com.example.timeisup.schedule.Schedule
 import com.example.timeisup.schedule.ScheduleListAdapter
@@ -32,6 +31,8 @@ class ScheduleAddingActivity
     }
 
     override lateinit var mPresenter: ScheduleAddingContract.Presenter
+
+    lateinit var mScheduleNameEditText: EditText
     lateinit var mAddDateImageView: ImageView
     lateinit var mEditDateImageView: ImageView
     lateinit var mDatePickerDialog: DatePickerDialog
@@ -57,6 +58,7 @@ class ScheduleAddingActivity
     private var mScheduleTime: Long = 0
     private var mSchedulePlace: Place? = null
     private lateinit var mScheduleKey: String
+    private var mIsScheduleNameSet: Boolean = false
     private var mIsDateSet: Boolean = false
     private var mIsTimeSet: Boolean = false
     private var mIsPlaceSet: Boolean = false
@@ -81,6 +83,7 @@ class ScheduleAddingActivity
 
     private fun init() {
         mPresenter = ScheduleAddingPresenter(this)
+        mScheduleNameEditText = et_schedule_name
         mAddDateImageView = iv_add_date
         mEditDateImageView = iv_edit_date
         mAddDateTextView = tv_add_date
@@ -140,7 +143,8 @@ class ScheduleAddingActivity
         val latitude: Double = extrasArray[2] as Double
         val longitude: Double = extrasArray[3] as Double
         val isConfirmed: Boolean = extrasArray[4] as Boolean
-        val key: String = extrasArray[5] as String
+        val scheduleName: String = extrasArray[5] as String
+        val key: String = extrasArray[6] as String
         var year: Int
         var month: Int
         var day: Int
@@ -149,6 +153,7 @@ class ScheduleAddingActivity
         var dateText: String = ""
         var timeText: String = ""
 
+        mScheduleNameEditText.text = SpannableStringBuilder(scheduleName)
         mScheduleCalendar.let {
             it.timeInMillis = time
             year = it.get(Calendar.YEAR)
@@ -186,6 +191,7 @@ class ScheduleAddingActivity
         mEditScheduleButton.visibility = View.VISIBLE
 
         mScheduleKey = key
+        mIsScheduleNameSet = true
         mIsDateSet = true
         mIsTimeSet = true
         mIsPlaceSet = true
@@ -243,15 +249,14 @@ class ScheduleAddingActivity
             }
             R.id.btn_add_schedule -> {
                 var schedule: Schedule = Schedule()
+                val scheduleName: String = mScheduleNameEditText.text.toString()
 
-                mSchedulePlace?.let {
-                    schedule = Schedule(mScheduleTime, it.name, it.latLng?.latitude, it.latLng?.longitude, false)
+                mIsScheduleNameSet = scheduleName.isNotEmpty()
 
-                    mPresenter.addScheduleToDatabase(schedule)
-                    onBackPressed()
+                if(!mIsScheduleNameSet) {
+                    Toast.makeText(this, "일정 이름을 설정해주세요.", Toast.LENGTH_SHORT).show()
                 }
-
-                if(!mIsDateSet) {
+                else if(!mIsDateSet) {
                     Toast.makeText(this, "날짜를 설정해주세요.", Toast.LENGTH_SHORT).show()
                 }
                 else if(!mIsTimeSet) {
@@ -260,13 +265,30 @@ class ScheduleAddingActivity
                 else if(!mIsPlaceSet) {
                     Toast.makeText(this, "위치를 설정해주세요.", Toast.LENGTH_SHORT).show()
                 }
+                else {
+                    mSchedulePlace?.let {
+                        schedule = Schedule(scheduleName, mScheduleTime, it.name, it.latLng?.latitude, it.latLng?.longitude, false)
+
+                        mPresenter.addScheduleToDatabase(schedule)
+                        onBackPressed()
+                    }
+                }
             }
             R.id.btn_edit_schedule -> {
-                val schedule: Schedule = Schedule(mScheduleTime, mSchedulePlace?.name,
-                    mSchedulePlace?.latLng?.latitude, mSchedulePlace?.latLng?.longitude, false)
+                val scheduleName: String = mScheduleNameEditText.text.toString()
 
-                mPresenter.reschedule(mScheduleKey, schedule)
-                onBackPressed()
+                mIsScheduleNameSet = scheduleName.isNotEmpty()
+
+                if(mIsScheduleNameSet) {
+                    val schedule: Schedule = Schedule(scheduleName, mScheduleTime, mSchedulePlace?.name,
+                        mSchedulePlace?.latLng?.latitude, mSchedulePlace?.latLng?.longitude, false)
+
+                    mPresenter.reschedule(mScheduleKey, schedule)
+                    onBackPressed()
+                }
+                else {
+                    Toast.makeText(this, "일정 이름을 설정해주세요.", Toast.LENGTH_SHORT).show()
+                }
             }
             R.id.btn_cancel -> {
                 onBackPressed()
