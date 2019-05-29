@@ -189,6 +189,8 @@ class ScheduleListPresenter(private val mView: ScheduleListContract.View)
                 Log.d(TAG, "remove schedule at index $i")
 
                 mScheduleList.removeAt(i)
+
+                break
             }
         }
 
