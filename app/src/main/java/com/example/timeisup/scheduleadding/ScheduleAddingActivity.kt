@@ -55,8 +55,11 @@ class ScheduleAddingActivity
 
     private lateinit var mScheduleCalendar: Calendar
     private var mScheduleTime: Long = 0
-    private lateinit var mSchedulePlace: Place
+    private var mSchedulePlace: Place? = null
     private lateinit var mScheduleKey: String
+    private var mIsDateSet: Boolean = false
+    private var mIsTimeSet: Boolean = false
+    private var mIsPlaceSet: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -183,14 +186,15 @@ class ScheduleAddingActivity
         mEditScheduleButton.visibility = View.VISIBLE
 
         mScheduleKey = key
+        mIsDateSet = true
+        mIsTimeSet = true
+        mIsPlaceSet = true
     }
 
     override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
         Log.d(TAG, "onDateSet()")
 
         val date: String = "${year}년 ${month + 1}월 ${dayOfMonth}일"
-
-        Toast.makeText(this, date, LENGTH_SHORT).show()
 
         mAddDateImageView.visibility = View.INVISIBLE
         mEditDateImageView.visibility = View.VISIBLE
@@ -202,6 +206,7 @@ class ScheduleAddingActivity
             set(year, month, dayOfMonth)
         }
         mScheduleTime = mScheduleCalendar.timeInMillis
+        mIsDateSet = true
     }
 
     override fun onTimeSet(view: TimePicker?, hourOfDay: Int, minute: Int) {
@@ -222,6 +227,7 @@ class ScheduleAddingActivity
             set(Calendar.MINUTE, minute)
         }
         mScheduleTime = mScheduleCalendar.timeInMillis
+        mIsTimeSet = true
     }
 
     override fun onClick(v: View?) {
@@ -238,16 +244,26 @@ class ScheduleAddingActivity
             R.id.btn_add_schedule -> {
                 var schedule: Schedule = Schedule()
 
-                mSchedulePlace.let {
+                mSchedulePlace?.let {
                     schedule = Schedule(mScheduleTime, it.name, it.latLng?.latitude, it.latLng?.longitude, false)
+
+                    mPresenter.addScheduleToDatabase(schedule)
+                    onBackPressed()
                 }
 
-                mPresenter.addScheduleToDatabase(schedule)
-                onBackPressed()
+                if(!mIsDateSet) {
+                    Toast.makeText(this, "날짜를 설정해주세요.", Toast.LENGTH_SHORT).show()
+                }
+                else if(!mIsTimeSet) {
+                    Toast.makeText(this, "시간을 설정해주세요.", Toast.LENGTH_SHORT).show()
+                }
+                else if(!mIsPlaceSet) {
+                    Toast.makeText(this, "위치를 설정해주세요.", Toast.LENGTH_SHORT).show()
+                }
             }
             R.id.btn_edit_schedule -> {
-                val schedule: Schedule = Schedule(mScheduleTime, mSchedulePlace.name,
-                    mSchedulePlace.latLng?.latitude, mSchedulePlace.latLng?.longitude, false)
+                val schedule: Schedule = Schedule(mScheduleTime, mSchedulePlace?.name,
+                    mSchedulePlace?.latLng?.latitude, mSchedulePlace?.latLng?.longitude, false)
 
                 mPresenter.reschedule(mScheduleKey, schedule)
                 onBackPressed()
@@ -272,6 +288,7 @@ class ScheduleAddingActivity
 
                         place?.let {
                             mSchedulePlace = it
+                            mIsPlaceSet = true
                         }
 
                         placeName?.let {
