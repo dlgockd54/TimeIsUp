@@ -2,6 +2,8 @@ package com.example.timeisup.schedule
 
 import android.util.Log
 import com.example.timeisup.firebase.FirebaseManager
+import com.example.timeisup.taskmanager.RescheduleTaskManager
+import com.example.timeisup.taskmanager.TaskManager
 import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -18,9 +20,10 @@ class ScheduleListPresenter(private val mView: ScheduleListContract.View)
     }
 
     private val TAG: String = ScheduleListPresenter::class.java.simpleName
-    private val mScheduleList: LinkedList<Pair<Schedule, String?>> = LinkedList<Pair<Schedule, String?>>()
+    private var mScheduleList: LinkedList<Pair<Schedule, String?>> = LinkedList<Pair<Schedule, String?>>()
     private val mNotConfirmedScheduleList: LinkedList<Pair<Schedule, String?>> = LinkedList<Pair<Schedule, String?>>()
     private val mConfirmedScheduleList: LinkedList<Pair<Schedule, String?>> = LinkedList<Pair<Schedule, String?>>()
+    private val mTaskManager: TaskManager = RescheduleTaskManager()
     private val mChildEventListener: ChildEventListener = object: ChildEventListener {
         override fun onCancelled(databaseError: DatabaseError) {
             Log.d(TAG, "onCancelled()")
@@ -33,7 +36,9 @@ class ScheduleListPresenter(private val mView: ScheduleListContract.View)
         override fun onChildChanged(dataSnapshot: DataSnapshot, s: String?) {
             Log.d(TAG, "onChildChanged()")
 
-            onRescheduledFromDatabase(dataSnapshot)
+            val taskItemArray: Array<Any> = arrayOf(mView.getAndroidThings(), dataSnapshot)
+
+            mTaskManager.runTask(taskItemArray)
         }
 
         /**
@@ -192,72 +197,11 @@ class ScheduleListPresenter(private val mView: ScheduleListContract.View)
         mView.refreshAdapter()
     }
 
-    private fun onRescheduledFromDatabase(dataSnapshot: DataSnapshot) {
-        Log.d(TAG, "onScheduleChangedFromDatabase()")
+    fun getConfirmedScheduleList(): LinkedList<Pair<Schedule, String?>> = mConfirmedScheduleList
 
-        val key: String? = dataSnapshot.key
-        val scheduleName: String? = dataSnapshot.child("scheduleName").getValue(String::class.java)
-        val isConfirmed: Boolean? = dataSnapshot.child("isConfirmed").getValue(Boolean::class.java)
-        val latitude: Double? = dataSnapshot.child("latitude").getValue(Double::class.java)
-        val longitude: Double? = dataSnapshot.child("longitude").getValue(Double::class.java)
-        val time: Long? = dataSnapshot.child("time").getValue(Long::class.java)
-        val placeName: String? = dataSnapshot.child("placeName").getValue(String::class.java)
+    fun getNotConfirmedScheduleList(): LinkedList<Pair<Schedule, String?>> = mNotConfirmedScheduleList
 
-        Log.d(TAG, "scheduleName: $scheduleName")
-        Log.d(TAG, "isConfirmed: $isConfirmed")
-        Log.d(TAG, "latitude: $latitude")
-        Log.d(TAG, "longitude: $longitude")
-        Log.d(TAG, "time: $time")
-        Log.d(TAG, "placeName: $placeName")
-        Log.d(TAG, "key: $key ")
-
-        for(i in 0 until mScheduleList.size) {
-            Log.d(TAG, "i: $i, key: ${mScheduleList[i].second}")
-
-            val listItem: Pair<Schedule, String?> = mScheduleList[i]
-
-            if (listItem.second == key) {
-                listItem.first.let {
-                    scheduleName?.run {
-                        it.setScheduleName(scheduleName)
-                    }
-                    time?.run {
-                        it.setTime(time)
-                    }
-                    placeName?.run {
-                        it.setPlaceName(placeName)
-                    }
-                    latitude?.run {
-                        it.setLatitude(latitude)
-                    }
-                    longitude?.run {
-                        it.setLongitude(longitude)
-                    }
-                    isConfirmed?.run {
-                        it.setIsConfirmed(isConfirmed)
-                    }
-                }
-
-                mView.refreshAdapter()
-
-                break
-            }
-        }
-
-        mConfirmedScheduleList.clear()
-        mNotConfirmedScheduleList.clear()
-
-        for(listItem in mScheduleList) {
-            listItem.first.getIsConfirmed()?.let {
-                if(it) {
-                    mConfirmedScheduleList.add(listItem)
-                }
-                else {
-                    mNotConfirmedScheduleList.add(listItem)
-                }
-            }
-        }
-
-        mergeScheduleList()
+    fun refreshAdapter() {
+        mView.refreshAdapter()
     }
 }

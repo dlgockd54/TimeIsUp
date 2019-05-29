@@ -12,6 +12,7 @@ import android.util.Log
 import android.view.View
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
+import com.example.timeisup.AndroidThings
 import com.example.timeisup.BaseActivity
 import com.example.timeisup.R
 import com.example.timeisup.scheduleadding.ScheduleAddingActivity
@@ -94,5 +95,9 @@ class ScheduleListActivity : BaseActivity(), ScheduleListContract.View, View.OnC
 
         mAdapter.replaceScheduleList(mPresenter.getScheduleList())
         mAdapter.notifyDataSetChanged()
+    }
+
+    override fun getAndroidThings(): AndroidThings {
+        return RescheduleAndroidThings(RescheduleTask(mPresenter))
     }
 }
