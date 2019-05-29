@@ -11,4 +11,5 @@
     <string name="add_schedule">일정 추가</string>
     <string name="edit_schedule">일정 변경</string>
     <string name="cancel">취소</string>
+    <string name="confirm_schedule">일정 확정하기</string>
 </resources>

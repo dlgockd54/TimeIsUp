@@ -18,12 +18,13 @@ import com.example.timeisup.schedule.Schedule
 import com.example.timeisup.schedule.ScheduleListAdapter
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.libraries.places.api.model.Place
+import com.suke.widget.SwitchButton
 import kotlinx.android.synthetic.main.activity_schedule_adding.*
 import java.util.*
 
 class ScheduleAddingActivity
     : BaseActivity(), ScheduleAddingContract.View, DatePickerDialog.OnDateSetListener
-    , TimePickerDialog.OnTimeSetListener, View.OnClickListener {
+    , TimePickerDialog.OnTimeSetListener, View.OnClickListener, SwitchButton.OnCheckedChangeListener {
     private val TAG: String = ScheduleAddingActivity::class.java.simpleName
 
     companion object {
@@ -50,6 +51,7 @@ class ScheduleAddingActivity
     lateinit var mAddScheduleButton: Button
     lateinit var mCancelButton: Button
     lateinit var mEditScheduleButton: Button
+    lateinit var mScheduleConfirmSwitchButton: SwitchButton
     lateinit var mAddDateRelativeLayout: RelativeLayout
     lateinit var mAddTimeRelativeLayout: RelativeLayout
     lateinit var mAddPlaceRelativeLayout: RelativeLayout
@@ -62,6 +64,7 @@ class ScheduleAddingActivity
     private var mIsDateSet: Boolean = false
     private var mIsTimeSet: Boolean = false
     private var mIsPlaceSet: Boolean = false
+    private var mIsScheduleConfirmed: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -96,6 +99,9 @@ class ScheduleAddingActivity
         mEditTimeImageView = iv_edit_time
         mPlaceTextView = tv_place
         mAddPlaceTextView = tv_add_place
+        mScheduleConfirmSwitchButton = sb_confirm_schedule.apply {
+            setOnCheckedChangeListener(this@ScheduleAddingActivity)
+        }
         mAddScheduleButton = btn_add_schedule.apply {
             setOnClickListener(this@ScheduleAddingActivity)
         }
@@ -195,6 +201,11 @@ class ScheduleAddingActivity
         mIsDateSet = true
         mIsTimeSet = true
         mIsPlaceSet = true
+        mIsScheduleConfirmed = isConfirmed
+
+        if(mIsScheduleConfirmed) {
+            mScheduleConfirmSwitchButton.toggle(true)
+        }
     }
 
     override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
@@ -236,6 +247,14 @@ class ScheduleAddingActivity
         mIsTimeSet = true
     }
 
+    override fun onCheckedChanged(view: SwitchButton?, isChecked: Boolean) {
+        Log.d(TAG, "onCheckedChanged()")
+
+        mIsScheduleConfirmed = isChecked
+
+        Log.d(TAG, "mIsScheduleFix: $mIsScheduleConfirmed")
+    }
+
     override fun onClick(v: View?) {
         when(v?.id) {
             R.id.rl_add_date -> {
@@ -267,7 +286,7 @@ class ScheduleAddingActivity
                 }
                 else {
                     mSchedulePlace?.let {
-                        schedule = Schedule(scheduleName, mScheduleTime, it.name, it.latLng?.latitude, it.latLng?.longitude, false)
+                        schedule = Schedule(scheduleName, mScheduleTime, it.name, it.latLng?.latitude, it.latLng?.longitude, mIsScheduleConfirmed)
 
                         mPresenter.addScheduleToDatabase(schedule)
                         onBackPressed()
@@ -281,7 +300,7 @@ class ScheduleAddingActivity
 
                 if(mIsScheduleNameSet) {
                     val schedule: Schedule = Schedule(scheduleName, mScheduleTime, mSchedulePlace?.name,
-                        mSchedulePlace?.latLng?.latitude, mSchedulePlace?.latLng?.longitude, false)
+                        mSchedulePlace?.latLng?.latitude, mSchedulePlace?.latLng?.longitude, mIsScheduleConfirmed)
 
                     mPresenter.reschedule(mScheduleKey, schedule)
                     onBackPressed()
