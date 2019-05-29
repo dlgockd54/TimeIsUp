@@ -70,7 +70,6 @@ class ScheduleListPresenter(private val mView: ScheduleListContract.View)
             }
 
             mergeScheduleList()
-//            addSchedule(schedule, key)
         }
 
         override fun onChildRemoved(dataSnapshot: DataSnapshot) {
@@ -90,14 +89,8 @@ class ScheduleListPresenter(private val mView: ScheduleListContract.View)
         return mScheduleList
     }
 
-    private fun addSchedule(schedule: Schedule, key: String?) {
-        mScheduleList.add(Pair(schedule, key))
-        mView.refreshAdapter()
-    }
-
     private fun addScheduleToList(scheduleItem: Pair<Schedule, String?>) {
         mScheduleList.add(scheduleItem)
-        mView.refreshAdapter()
     }
 
     private fun sortScheduleList() {
@@ -158,6 +151,8 @@ class ScheduleListPresenter(private val mView: ScheduleListContract.View)
         for(item in mNotConfirmedScheduleList) {
             addScheduleToList(item)
         }
+
+        mView.refreshAdapter()
     }
 
     private fun addConfirmedScheduleToList(schedule: Schedule, key: String?) {
@@ -219,34 +214,50 @@ class ScheduleListPresenter(private val mView: ScheduleListContract.View)
         for(i in 0 until mScheduleList.size) {
             Log.d(TAG, "i: $i, key: ${mScheduleList[i].second}")
 
-            mScheduleList[i].let {
-                if(it.second == key) {
-                    it.first.let {
-                        scheduleName?.run {
-                            it.setScheduleName(scheduleName)
-                        }
-                        time?.run {
-                            it.setTime(time)
-                        }
-                        placeName?.run {
-                            it.setPlaceName(placeName)
-                        }
-                        latitude?.run {
-                            it.setLatitude(latitude)
-                        }
-                        longitude?.run {
-                            it.setLongitude(longitude)
-                        }
-                        isConfirmed?.run {
-                            it.setIsConfirmed(isConfirmed)
-                        }
+            val listItem: Pair<Schedule, String?> = mScheduleList[i]
+
+            if (listItem.second == key) {
+                listItem.first.let {
+                    scheduleName?.run {
+                        it.setScheduleName(scheduleName)
                     }
+                    time?.run {
+                        it.setTime(time)
+                    }
+                    placeName?.run {
+                        it.setPlaceName(placeName)
+                    }
+                    latitude?.run {
+                        it.setLatitude(latitude)
+                    }
+                    longitude?.run {
+                        it.setLongitude(longitude)
+                    }
+                    isConfirmed?.run {
+                        it.setIsConfirmed(isConfirmed)
+                    }
+                }
 
-                    mView.refreshAdapter()
+                mView.refreshAdapter()
 
-                    return
+                break
+            }
+        }
+
+        mConfirmedScheduleList.clear()
+        mNotConfirmedScheduleList.clear()
+
+        for(listItem in mScheduleList) {
+            listItem.first.getIsConfirmed()?.let {
+                if(it) {
+                    mConfirmedScheduleList.add(listItem)
+                }
+                else {
+                    mNotConfirmedScheduleList.add(listItem)
                 }
             }
         }
+
+        mergeScheduleList()
     }
 }
