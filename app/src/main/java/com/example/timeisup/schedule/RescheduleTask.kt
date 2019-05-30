@@ -1,6 +1,5 @@
 package com.example.timeisup.schedule
 
-import android.os.AsyncTask
 import android.util.Log
 import com.google.firebase.database.DataSnapshot
 import java.util.*
@@ -9,12 +8,12 @@ import java.util.*
  * Created by hclee on 2019-05-30.
  */
 
-class RescheduleTask(var mPresenter: ScheduleListContract.Presenter): AsyncTask<DataSnapshot, Pair<Schedule, String?>, Unit>() {
+class RescheduleTask(var mPresenter: ScheduleListContract.Presenter): ScheduleListTask() {
     private val TAG: String = RescheduleTask::class.java.simpleName
 
-    private lateinit var mScheduleList: LinkedList<Pair<Schedule, String?>>
-    private lateinit var mConfirmedScheduleList: LinkedList<Pair<Schedule, String?>>
-    private lateinit var mNotConfirmedScheduleList: LinkedList<Pair<Schedule, String?>>
+    override lateinit var mScheduleList: LinkedList<Pair<Schedule, String?>>
+    override lateinit var mConfirmedScheduleList: LinkedList<Pair<Schedule, String?>>
+    override lateinit var mNotConfirmedScheduleList: LinkedList<Pair<Schedule, String?>>
 
     override fun onPreExecute() {
         mScheduleList = mPresenter.getScheduleList()
@@ -87,70 +86,6 @@ class RescheduleTask(var mPresenter: ScheduleListContract.Presenter): AsyncTask<
         }
 
         mergeScheduleList()
-    }
-
-    private fun addScheduleToList(scheduleItem: Pair<Schedule, String?>) {
-        mScheduleList.add(scheduleItem)
-    }
-
-    private fun mergeScheduleList() {
-        sortScheduleList()
-
-        mScheduleList.clear()
-
-        for(item in mConfirmedScheduleList) {
-            addScheduleToList(item)
-        }
-
-        for(item in mNotConfirmedScheduleList) {
-            addScheduleToList(item)
-        }
-    }
-
-    private fun sortScheduleList() {
-        mConfirmedScheduleList.sortWith(object: Comparator<Pair<Schedule, String?>> {
-            override fun compare(o1: Pair<Schedule, String?>, o2: Pair<Schedule, String?>): Int {
-                var ret: Int = 0
-
-                o1.first.getTime()?.run {
-                    o2.first.getTime()?.let {
-                        if (this > it) {
-                            ret = 1
-                        }
-                        else if(this == it) {
-                            ret = 0
-                        }
-                        else {
-                            ret = -1
-                        }
-                    }
-                }
-
-                return ret
-            }
-        })
-
-        mNotConfirmedScheduleList.sortWith(object: Comparator<Pair<Schedule, String?>> {
-            override fun compare(o1: Pair<Schedule, String?>, o2: Pair<Schedule, String?>): Int {
-                var ret: Int = 0
-
-                o1.first.getTime()?.run {
-                    o2.first.getTime()?.let {
-                        if (this > it) {
-                            ret = 1
-                        }
-                        else if(this == it) {
-                            ret = 0
-                        }
-                        else {
-                            ret = -1
-                        }
-                    }
-                }
-
-                return ret
-            }
-        })
     }
 
     override fun onProgressUpdate(vararg values: Pair<Schedule, String?>?) {
