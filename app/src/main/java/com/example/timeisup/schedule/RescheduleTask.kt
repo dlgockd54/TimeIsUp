@@ -8,7 +8,7 @@ import java.util.*
  * Created by hclee on 2019-05-30.
  */
 
-class RescheduleTask(var mPresenter: ScheduleListContract.Presenter): ScheduleListTask() {
+class RescheduleTask(val mPresenter: ScheduleListContract.Presenter): ScheduleListTask() {
     private val TAG: String = RescheduleTask::class.java.simpleName
 
     override lateinit var mScheduleList: LinkedList<Pair<Schedule, String?>>
@@ -18,7 +18,7 @@ class RescheduleTask(var mPresenter: ScheduleListContract.Presenter): ScheduleLi
     override fun onPreExecute() {
         mScheduleList = mPresenter.getScheduleList()
         mConfirmedScheduleList = (mPresenter as ScheduleListPresenter).getConfirmedScheduleList()
-        mNotConfirmedScheduleList = (mPresenter as ScheduleListPresenter).getNotConfirmedScheduleList()
+        mNotConfirmedScheduleList = mPresenter.getNotConfirmedScheduleList()
     }
 
     override fun doInBackground(vararg dataSnapshot: DataSnapshot): Unit {
