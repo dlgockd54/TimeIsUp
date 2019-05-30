@@ -36,9 +36,11 @@ class ScheduleListPresenter(private val mView: ScheduleListContract.View)
         override fun onChildChanged(dataSnapshot: DataSnapshot, s: String?) {
             Log.d(TAG, "onChildChanged()")
 
-            val taskItemArray: Array<Any> = arrayOf(mView.getAndroidThings(), dataSnapshot)
+            mView.getAndroidThings(ChildEvent.CHILDCHANGED)?.let {
+                val taskItemArray: Array<Any> = arrayOf(it, dataSnapshot)
 
-            mTaskManager.runTask(taskItemArray)
+                mTaskManager.runTask(taskItemArray)
+            }
         }
 
         /**

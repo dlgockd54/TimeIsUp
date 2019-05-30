@@ -13,7 +13,7 @@ import java.util.*
 interface ScheduleListContract {
     interface View: BaseView<Presenter> {
         fun refreshAdapter()
-        fun getAndroidThings(): AndroidThings
+        fun getAndroidThings(event: ChildEvent): AndroidThings?
     }
 
     interface Presenter: BasePresenter {

@@ -97,7 +97,28 @@ class ScheduleListActivity : BaseActivity(), ScheduleListContract.View, View.OnC
         mAdapter.notifyDataSetChanged()
     }
 
-    override fun getAndroidThings(): AndroidThings {
+    override fun getAndroidThings(event: ChildEvent): AndroidThings? {
+        var androidThings: AndroidThings? = null
+
+        when(event) {
+            ChildEvent.CHILDADDED -> {
+
+            }
+            ChildEvent.CHILDCHANGED -> {
+                androidThings = getRescheduleAndroidThings()
+            }
+            ChildEvent.CHILDMOVED -> {
+
+            }
+            ChildEvent.CHILDREMOVED -> {
+
+            }
+        }
+
+        return androidThings
+    }
+
+    fun getRescheduleAndroidThings(): AndroidThings {
         return RescheduleAndroidThings(RescheduleTask(mPresenter))
     }
 }
