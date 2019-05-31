@@ -47,34 +47,11 @@ class ScheduleListPresenter(private val mView: ScheduleListContract.View)
         override fun onChildAdded(dataSnapshot: DataSnapshot, s: String?) {
             Log.d(TAG, "onChildAdded()")
 
-            val key: String? = dataSnapshot.key
-            val scheduleName: String? = dataSnapshot.child("scheduleName").getValue(String::class.java)
-            val isConfirmed: Boolean? = dataSnapshot.child("isConfirmed").getValue(Boolean::class.java)
-            val latitude: Double? = dataSnapshot.child("latitude").getValue(Double::class.java)
-            val longitude: Double? = dataSnapshot.child("longitude").getValue(Double::class.java)
-            val time: Long? = dataSnapshot.child("time").getValue(Long::class.java)
-            val placeName: String? = dataSnapshot.child("placeName").getValue(String::class.java)
+            mView.getAndroidThings(ChildEvent.CHILDADDED)?.let {
+                val taskItemArray: Array<Any> = arrayOf(it, dataSnapshot)
 
-            Log.d(TAG, "key: $key")
-            Log.d(TAG, "scheduleName: $scheduleName")
-            Log.d(TAG, "isConfirmed: $isConfirmed")
-            Log.d(TAG, "latitude: $latitude")
-            Log.d(TAG, "longitude: $longitude")
-            Log.d(TAG, "time: $time")
-            Log.d(TAG, "placeName: $placeName")
-
-            val schedule: Schedule = Schedule(scheduleName, time, placeName, latitude, longitude, isConfirmed)
-
-            isConfirmed?.let {
-                if(it) {
-                    addConfirmedScheduleToList(schedule, key)
-                }
-                else {
-                    addNotConfirmedScheduleToList(schedule, key)
-                }
+                TaskManager.runTask(taskItemArray)
             }
-
-            mergeScheduleList()
         }
 
         override fun onChildRemoved(dataSnapshot: DataSnapshot) {
@@ -92,84 +69,6 @@ class ScheduleListPresenter(private val mView: ScheduleListContract.View)
 
     override fun getScheduleList(): LinkedList<Pair<Schedule, String?>> {
         return mScheduleList
-    }
-
-    private fun addScheduleToList(scheduleItem: Pair<Schedule, String?>) {
-        mScheduleList.add(scheduleItem)
-    }
-
-    private fun sortScheduleList() {
-        mConfirmedScheduleList.sortWith(object: Comparator<Pair<Schedule, String?>> {
-            override fun compare(o1: Pair<Schedule, String?>, o2: Pair<Schedule, String?>): Int {
-                var ret: Int = 0
-
-                o1.first.getTime()?.run {
-                    o2.first.getTime()?.let {
-                        if (this > it) {
-                            ret = 1
-                        }
-                        else if(this == it) {
-                            ret = 0
-                        }
-                        else {
-                            ret = -1
-                        }
-                    }
-                }
-
-                return ret
-            }
-        })
-
-        mNotConfirmedScheduleList.sortWith(object: Comparator<Pair<Schedule, String?>> {
-            override fun compare(o1: Pair<Schedule, String?>, o2: Pair<Schedule, String?>): Int {
-                var ret: Int = 0
-
-                o1.first.getTime()?.run {
-                    o2.first.getTime()?.let {
-                        if (this > it) {
-                            ret = 1
-                        }
-                        else if(this == it) {
-                            ret = 0
-                        }
-                        else {
-                            ret = -1
-                        }
-                    }
-                }
-
-                return ret
-            }
-        })
-    }
-
-    private fun mergeScheduleList() {
-        sortScheduleList()
-
-        mScheduleList.clear()
-
-        for(item in mConfirmedScheduleList) {
-            addScheduleToList(item)
-        }
-
-        for(item in mNotConfirmedScheduleList) {
-            addScheduleToList(item)
-        }
-
-        mView.refreshAdapter()
-    }
-
-    private fun addConfirmedScheduleToList(schedule: Schedule, key: String?) {
-        Log.d(TAG, "addConfirmedScheduleToList(), key: $key")
-
-        mConfirmedScheduleList.add(Pair(schedule, key))
-    }
-
-    private fun addNotConfirmedScheduleToList(schedule: Schedule, key: String?) {
-        Log.d(TAG, "addNotConfirmedScheduleToList(), key: $key")
-
-        mNotConfirmedScheduleList.add(Pair(schedule, key))
     }
 
     override fun removeScheduleFromDatabase(key: String?) {
