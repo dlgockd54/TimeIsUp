@@ -32,39 +32,56 @@ object FirebaseManager {
     }
 
     fun addScheduleToDatabase(schedule: Schedule) {
-        mDatabaseReference.child(ScheduleListPresenter.DB_NODE_NAME).push().setValue(schedule).let {
-            it.addOnSuccessListener(onSuccessListener)
-            it.addOnFailureListener(onFailureListener)
-            it.addOnCompleteListener(onCompleteListener)
-            it.addOnCanceledListener(onCanceledListener)
-        }
+        val addScheduleThread: Thread = Thread(Runnable {
+            Log.d(TAG, "run()")
+
+            mDatabaseReference.child(ScheduleListPresenter.DB_NODE_NAME).push().setValue(schedule).let {
+                it.addOnSuccessListener(onSuccessListener)
+                it.addOnFailureListener(onFailureListener)
+                it.addOnCompleteListener(onCompleteListener)
+                it.addOnCanceledListener(onCanceledListener)
+            }
+        })
+
+        addScheduleThread.start()
     }
 
     fun rescheduleFromDatabase(key: String, schedule: Schedule) {
-        Log.d(TAG, "editScheduleFromDatabase()")
+        val rescheduleThread: Thread = Thread(Runnable {
+            Log.d(TAG, "run()")
 
-        val map: HashMap<String, Any> = HashMap<String, Any>().apply {
-            put(key, schedule)
-        }
+            val map: HashMap<String, Any> = HashMap<String, Any>().apply {
+                put(key, schedule)
+            }
 
-        mDatabaseReference.child(ScheduleListPresenter.DB_NODE_NAME).updateChildren(map).let {
-            it.addOnSuccessListener(onSuccessListener)
-            it.addOnFailureListener(onFailureListener)
-            it.addOnCompleteListener(onCompleteListener)
-            it.addOnCanceledListener(onCanceledListener)
-        }
+            mDatabaseReference.child(ScheduleListPresenter.DB_NODE_NAME).updateChildren(map).let {
+                Log.d(TAG, "rescheduleFromDatabase()")
+                it.addOnSuccessListener(onSuccessListener)
+                it.addOnFailureListener(onFailureListener)
+                it.addOnCompleteListener(onCompleteListener)
+                it.addOnCanceledListener(onCanceledListener)
+            }
+        })
+
+        rescheduleThread.start()
     }
 
     fun removeScheduleFromDatabase(key: String) {
         Log.d(TAG, "removeScheduleFromDatabase()")
         Log.d(TAG, "key: $key")
 
-        mDatabaseReference.child(ScheduleListPresenter.DB_NODE_NAME).child(key).removeValue().let {
-            it.addOnSuccessListener(onSuccessListener)
-            it.addOnFailureListener(onFailureListener)
-            it.addOnCompleteListener(onCompleteListener)
-            it.addOnCanceledListener(onCanceledListener)
-        }
+        val removeScheduleThread: Thread = Thread(Runnable {
+            Log.d(TAG, "run()")
+
+            mDatabaseReference.child(ScheduleListPresenter.DB_NODE_NAME).child(key).removeValue().let {
+                it.addOnSuccessListener(onSuccessListener)
+                it.addOnFailureListener(onFailureListener)
+                it.addOnCompleteListener(onCompleteListener)
+                it.addOnCanceledListener(onCanceledListener)
+            }
+        })
+
+        removeScheduleThread.start()
     }
 
     fun addChildEventListener(listener: ChildEventListener) {
