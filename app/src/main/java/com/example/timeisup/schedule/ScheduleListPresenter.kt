@@ -2,8 +2,8 @@ package com.example.timeisup.schedule
 
 import android.util.Log
 import com.example.timeisup.firebase.FirebaseManager
-import com.example.timeisup.taskmanager.RescheduleTaskManager
-import com.example.timeisup.taskmanager.TaskManager
+import com.example.timeisup.task.taskmanager.RescheduleTaskManager
+import com.example.timeisup.task.taskmanager.TaskManager
 import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError

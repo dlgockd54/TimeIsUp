@@ -1,4 +1,4 @@
-package com.example.timeisup.taskmanager
+package com.example.timeisup.task.taskmanager
 
 import android.util.Log
 import com.example.timeisup.schedule.RescheduleAndroidThings
