@@ -28,13 +28,19 @@ class RescheduleTask(val mPresenter: ScheduleListContract.Presenter): ScheduleLi
     override fun doInBackground(vararg dataSnapshot: DataSnapshot): Unit {
         Log.d(TAG, "doInBackground()")
 
-        val key: String? = dataSnapshot[0].key
-        val scheduleName: String? = dataSnapshot[0].child("scheduleName").getValue(String::class.java)
-        val isConfirmed: Boolean? = dataSnapshot[0].child("isConfirmed").getValue(Boolean::class.java)
-        val latitude: Double? = dataSnapshot[0].child("latitude").getValue(Double::class.java)
-        val longitude: Double? = dataSnapshot[0].child("longitude").getValue(Double::class.java)
-        val time: Long? = dataSnapshot[0].child("time").getValue(Long::class.java)
-        val placeName: String? = dataSnapshot[0].child("placeName").getValue(String::class.java)
+        onChildChanged(dataSnapshot[0])
+    }
+
+    private fun onChildChanged(dataSnapshot: DataSnapshot) {
+        Log.d(TAG, "onChildChanged()")
+
+        val key: String? = dataSnapshot.key
+        val scheduleName: String? = dataSnapshot.child("scheduleName").getValue(String::class.java)
+        val isConfirmed: Boolean? = dataSnapshot.child("isConfirmed").getValue(Boolean::class.java)
+        val latitude: Double? = dataSnapshot.child("latitude").getValue(Double::class.java)
+        val longitude: Double? = dataSnapshot.child("longitude").getValue(Double::class.java)
+        val time: Long? = dataSnapshot.child("time").getValue(Long::class.java)
+        val placeName: String? = dataSnapshot.child("placeName").getValue(String::class.java)
 
         Log.d(TAG, "scheduleName: $scheduleName")
         Log.d(TAG, "isConfirmed: $isConfirmed")
