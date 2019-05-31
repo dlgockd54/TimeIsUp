@@ -8,7 +8,7 @@ import java.util.*
  * Created by hclee on 2019-05-30.
  */
 
-abstract class ScheduleListTask: AsyncTask<DataSnapshot, Pair<Schedule, String?>, Unit>() {
+abstract class ScheduleListTask(val mPresenter: ScheduleListContract.Presenter): AsyncTask<DataSnapshot, Pair<Schedule, String?>, Unit>() {
     open lateinit var mScheduleList: LinkedList<Pair<Schedule, String?>>
     open lateinit var mConfirmedScheduleList: LinkedList<Pair<Schedule, String?>>
     open lateinit var mNotConfirmedScheduleList: LinkedList<Pair<Schedule, String?>>
@@ -75,5 +75,9 @@ abstract class ScheduleListTask: AsyncTask<DataSnapshot, Pair<Schedule, String?>
 
     private fun addScheduleToList(scheduleItem: Pair<Schedule, String?>) {
         mScheduleList.add(scheduleItem)
+    }
+
+    override fun onPostExecute(result: Unit?) {
+        (mPresenter as ScheduleListPresenter).refreshAdapter()
     }
 }

@@ -12,7 +12,7 @@ import java.util.*
  * Created by hclee on 2019-05-31.
  */
 
-class ScheduleRemovingTask(private val mPresenter: ScheduleListContract.Presenter): ScheduleListTask() {
+class ScheduleRemovingTask(presenter: ScheduleListContract.Presenter): ScheduleListTask(presenter) {
     private val TAG: String = ScheduleListTask::class.java.simpleName
 
     override lateinit var mScheduleList: LinkedList<Pair<Schedule, String?>>
@@ -52,11 +52,5 @@ class ScheduleRemovingTask(private val mPresenter: ScheduleListContract.Presente
                 break
             }
         }
-    }
-
-    override fun onPostExecute(result: Unit?) {
-        Log.d(TAG, "onPostExecute()")
-
-        (mPresenter as ScheduleListPresenter).refreshAdapter()
     }
 }

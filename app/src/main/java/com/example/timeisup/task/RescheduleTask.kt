@@ -12,7 +12,7 @@ import java.util.*
  * Created by hclee on 2019-05-30.
  */
 
-class RescheduleTask(val mPresenter: ScheduleListContract.Presenter): ScheduleListTask() {
+class RescheduleTask(presenter: ScheduleListContract.Presenter): ScheduleListTask(presenter) {
     private val TAG: String = RescheduleTask::class.java.simpleName
 
     override lateinit var mScheduleList: LinkedList<Pair<Schedule, String?>>
@@ -104,11 +104,5 @@ class RescheduleTask(val mPresenter: ScheduleListContract.Presenter): ScheduleLi
 
     override fun onCancelled() {
 
-    }
-
-    override fun onPostExecute(result: Unit?) {
-        Log.d(TAG, "onPostExecute()")
-
-        (mPresenter as ScheduleListPresenter).refreshAdapter()
     }
 }
