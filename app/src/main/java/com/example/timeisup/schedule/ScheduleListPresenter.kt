@@ -57,9 +57,11 @@ class ScheduleListPresenter(private val mView: ScheduleListContract.View)
         override fun onChildRemoved(dataSnapshot: DataSnapshot) {
             Log.d(TAG, "onChildRemoved()")
 
-            val key: String? = dataSnapshot.key
+            mView.getAndroidThings(ChildEvent.CHILDREMOVED)?.let {
+                val taskItemArray: Array<Any> = arrayOf(it, dataSnapshot)
 
-            onScheduleRemovedFromDatabase(key)
+                TaskManager.runTask(taskItemArray)
+            }
         }
     }
 
@@ -77,23 +79,6 @@ class ScheduleListPresenter(private val mView: ScheduleListContract.View)
         key?.let {
             FirebaseManager.removeScheduleFromDatabase(it)
         }
-    }
-
-    private fun onScheduleRemovedFromDatabase(key: String?) {
-        Log.d(TAG, "removeScheduleFromList()")
-        Log.d(TAG, "key: $key")
-
-        for(i in 0 until mScheduleList.size) {
-            if(mScheduleList[i].second == key) {
-                Log.d(TAG, "remove schedule at index $i")
-
-                mScheduleList.removeAt(i)
-
-                break
-            }
-        }
-
-        mView.refreshAdapter()
     }
 
     fun getConfirmedScheduleList(): LinkedList<Pair<Schedule, String?>> = mConfirmedScheduleList

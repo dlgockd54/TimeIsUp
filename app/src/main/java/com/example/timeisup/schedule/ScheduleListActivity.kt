@@ -18,6 +18,7 @@ import com.example.timeisup.R
 import com.example.timeisup.scheduleadding.ScheduleAddingActivity
 import com.example.timeisup.task.RescheduleTask
 import com.example.timeisup.task.ScheduleAddingTask
+import com.example.timeisup.task.ScheduleRemovingTask
 import kotlinx.android.synthetic.main.activity_schedule_list.*
 
 class ScheduleListActivity : BaseActivity(), ScheduleListContract.View, View.OnClickListener {
@@ -113,7 +114,7 @@ class ScheduleListActivity : BaseActivity(), ScheduleListContract.View, View.OnC
 
             }
             ChildEvent.CHILDREMOVED -> {
-
+                androidThings = getScheduleRemovingAndroidThings()
             }
         }
 
@@ -129,6 +130,12 @@ class ScheduleListActivity : BaseActivity(), ScheduleListContract.View, View.OnC
     private fun getRescheduleAndroidThings(): AndroidThings {
         return RescheduleAndroidThings().apply {
             mScheduleListTask = RescheduleTask(mPresenter)
+        }
+    }
+
+    private fun getScheduleRemovingAndroidThings(): AndroidThings {
+        return ScheduleRemovingAndroidThings().apply {
+            mScheduleListTask = ScheduleRemovingTask(mPresenter)
         }
     }
 }
