@@ -1,6 +1,10 @@
-package com.example.timeisup.schedule
+package com.example.timeisup.task
 
 import android.util.Log
+import com.example.timeisup.schedule.Schedule
+import com.example.timeisup.schedule.ScheduleListContract
+import com.example.timeisup.schedule.ScheduleListPresenter
+import com.example.timeisup.schedule.ScheduleListTask
 import com.google.firebase.database.DataSnapshot
 import java.util.*
 

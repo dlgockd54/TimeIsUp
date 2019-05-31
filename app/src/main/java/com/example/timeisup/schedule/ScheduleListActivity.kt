@@ -16,6 +16,7 @@ import com.example.timeisup.AndroidThings
 import com.example.timeisup.BaseActivity
 import com.example.timeisup.R
 import com.example.timeisup.scheduleadding.ScheduleAddingActivity
+import com.example.timeisup.task.RescheduleTask
 import kotlinx.android.synthetic.main.activity_schedule_list.*
 
 class ScheduleListActivity : BaseActivity(), ScheduleListContract.View, View.OnClickListener {
