@@ -119,7 +119,9 @@ class ScheduleListActivity : BaseActivity(), ScheduleListContract.View, View.OnC
         return androidThings
     }
 
-    fun getRescheduleAndroidThings(): AndroidThings {
-        return RescheduleAndroidThings(RescheduleTask(mPresenter))
+    private fun getRescheduleAndroidThings(): AndroidThings {
+        return RescheduleAndroidThings().apply {
+            mScheduleListTask = RescheduleTask(mPresenter)
+        }
     }
 }

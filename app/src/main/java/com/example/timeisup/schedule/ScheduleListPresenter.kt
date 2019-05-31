@@ -2,7 +2,6 @@ package com.example.timeisup.schedule
 
 import android.util.Log
 import com.example.timeisup.firebase.FirebaseManager
-import com.example.timeisup.task.taskmanager.RescheduleTaskManager
 import com.example.timeisup.task.taskmanager.TaskManager
 import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
@@ -23,7 +22,6 @@ class ScheduleListPresenter(private val mView: ScheduleListContract.View)
     private var mScheduleList: LinkedList<Pair<Schedule, String?>> = LinkedList<Pair<Schedule, String?>>()
     private val mNotConfirmedScheduleList: LinkedList<Pair<Schedule, String?>> = LinkedList<Pair<Schedule, String?>>()
     private val mConfirmedScheduleList: LinkedList<Pair<Schedule, String?>> = LinkedList<Pair<Schedule, String?>>()
-    private val mTaskManager: TaskManager = RescheduleTaskManager()
     private val mChildEventListener: ChildEventListener = object: ChildEventListener {
         override fun onCancelled(databaseError: DatabaseError) {
             Log.d(TAG, "onCancelled()")
@@ -39,7 +37,7 @@ class ScheduleListPresenter(private val mView: ScheduleListContract.View)
             mView.getAndroidThings(ChildEvent.CHILDCHANGED)?.let {
                 val taskItemArray: Array<Any> = arrayOf(it, dataSnapshot)
 
-                mTaskManager.runTask(taskItemArray)
+                TaskManager.runTask(taskItemArray)
             }
         }
 
