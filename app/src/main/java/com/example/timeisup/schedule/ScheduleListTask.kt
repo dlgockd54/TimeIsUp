@@ -79,5 +79,6 @@ abstract class ScheduleListTask(val mPresenter: ScheduleListContract.Presenter):
 
     override fun onPostExecute(result: Unit?) {
         (mPresenter as ScheduleListPresenter).refreshAdapter()
+        mPresenter.makeNotification()
     }
 }

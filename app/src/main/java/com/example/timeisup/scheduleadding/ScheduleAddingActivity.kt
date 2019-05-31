@@ -14,6 +14,7 @@ import android.widget.*
 import com.example.timeisup.BaseActivity
 import com.example.timeisup.R
 import com.example.timeisup.googlemap.MapsActivity
+import com.example.timeisup.notification.ScheduleNotificationManager
 import com.example.timeisup.schedule.Schedule
 import com.example.timeisup.schedule.ScheduleListAdapter
 import com.google.android.gms.maps.model.LatLng

@@ -2,6 +2,7 @@ package com.example.timeisup.schedule
 
 import android.util.Log
 import com.example.timeisup.firebase.FirebaseManager
+import com.example.timeisup.notification.ScheduleNotificationManager
 import com.example.timeisup.task.taskmanager.TaskManager
 import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
@@ -67,6 +68,10 @@ class ScheduleListPresenter(private val mView: ScheduleListContract.View)
 
     init {
         FirebaseManager.addChildEventListener(mChildEventListener)
+    }
+
+    fun makeNotification() {
+        ScheduleNotificationManager.makeNotification(mView)
     }
 
     override fun getScheduleList(): LinkedList<Pair<Schedule, String?>> {

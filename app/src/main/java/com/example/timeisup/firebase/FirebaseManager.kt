@@ -1,6 +1,7 @@
 package com.example.timeisup.firebase
 
 import android.util.Log
+import com.example.timeisup.notification.ScheduleNotificationManager
 import com.example.timeisup.schedule.Schedule
 import com.example.timeisup.schedule.ScheduleListPresenter
 import com.google.android.gms.tasks.OnCanceledListener
@@ -43,6 +44,7 @@ object FirebaseManager {
             }
         })
 
+        ScheduleNotificationManager.setIsSelfTriggered(true)
         addScheduleThread.start()
     }
 
@@ -63,6 +65,7 @@ object FirebaseManager {
             }
         })
 
+        ScheduleNotificationManager.setIsSelfTriggered(true)
         rescheduleThread.start()
     }
 
@@ -81,6 +84,7 @@ object FirebaseManager {
             }
         })
 
+        ScheduleNotificationManager.setIsSelfTriggered(true)
         removeScheduleThread.start()
     }
 
