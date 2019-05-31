@@ -44,24 +44,24 @@ class ScheduleListAdapter(private val mActivity: ScheduleListActivity, private v
         holder.let {
             val schedule: Schedule = mScheduleList[position].first
 
-            if(!(it.itemView.hasOnClickListeners())) {
-                it.itemView.setOnClickListener {
-                    val key: String? = mScheduleList[position].second
-                    val extrasArray: Array<Any?> = arrayOf(schedule.getTime(),
-                        schedule.getPlaceName(),
-                        schedule.getLatitude(),
-                        schedule.getLongitude(),
-                        schedule.getIsConfirmed(),
-                        schedule.getScheduleName(),
-                        key)
-                    val intent: Intent = Intent().apply {
-                        putExtra(SCHEDULE_EXTRA, extrasArray)
-                    }
+            it.itemView.setOnClickListener {
+                Log.d(TAG, "position: $position")
 
-                    mActivity.startScheduleAddingActivityToEditSchedule(intent)
+                val key: String? = mScheduleList[position].second
+                val extrasArray: Array<Any?> = arrayOf(schedule.getTime(),
+                    schedule.getPlaceName(),
+                    schedule.getLatitude(),
+                    schedule.getLongitude(),
+                    schedule.getIsConfirmed(),
+                    schedule.getScheduleName(),
+                    key
+                )
+                val intent: Intent = Intent().apply {
+                    putExtra(SCHEDULE_EXTRA, extrasArray)
                 }
-            }
 
+                mActivity.startScheduleAddingActivityToEditSchedule(intent)
+            }
             it.itemView.setOnLongClickListener(object: View.OnLongClickListener {
                 override fun onLongClick(v: View?): Boolean {
                     Log.d(TAG, "onLongClick()")
