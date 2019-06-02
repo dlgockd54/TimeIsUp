@@ -16,6 +16,7 @@ import com.example.timeisup.AndroidThings
 import com.example.timeisup.BaseActivity
 import com.example.timeisup.R
 import com.example.timeisup.scheduleadding.ScheduleAddingActivity
+import com.example.timeisup.service.ScheduleEventQueueManager
 import com.example.timeisup.task.RescheduleTask
 import com.example.timeisup.task.ScheduleAddingTask
 import com.example.timeisup.task.ScheduleRemovingTask
@@ -60,6 +61,25 @@ class ScheduleListActivity : BaseActivity(), ScheduleListContract.View, View.OnC
         }
 
         initAdapter()
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        Log.d(TAG, "onResume()")
+
+        ScheduleEventQueueManager.mIsScheduleListActivityTop = true
+        ScheduleEventQueueManager.mPresenter = mPresenter
+
+        if(ScheduleEventQueueManager.isQueueHasWork()) {
+            mPresenter.performScheduleEventWork()
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+
+        ScheduleEventQueueManager.mIsScheduleListActivityTop = false
     }
 
     override fun onClick(v: View?) {
