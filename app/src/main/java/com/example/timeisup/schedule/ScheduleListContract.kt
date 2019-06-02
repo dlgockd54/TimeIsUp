@@ -20,5 +20,7 @@ interface ScheduleListContract {
         fun getScheduleList(): LinkedList<Pair<Schedule, String?>>
         fun removeScheduleFromDatabase(key: String?)
         fun performScheduleEventWork()
+        fun saveScheduleListObject()
+        fun restoreScheduleListObject()
     }
 }

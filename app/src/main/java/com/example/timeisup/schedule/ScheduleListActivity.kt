@@ -61,6 +61,12 @@ class ScheduleListActivity : BaseActivity(), ScheduleListContract.View, View.OnC
         }
 
         initAdapter()
+        restoreScheduleListObject()
+    }
+
+    private fun restoreScheduleListObject() {
+        mPresenter.restoreScheduleListObject()
+        refreshAdapter()
     }
 
     override fun onResume() {
@@ -80,6 +86,14 @@ class ScheduleListActivity : BaseActivity(), ScheduleListContract.View, View.OnC
         super.onPause()
 
         ScheduleEventQueueManager.mIsScheduleListActivityTop = false
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+
+        Log.d(TAG, "onDestroy()")
+
+        mPresenter.saveScheduleListObject()
     }
 
     override fun onClick(v: View?) {

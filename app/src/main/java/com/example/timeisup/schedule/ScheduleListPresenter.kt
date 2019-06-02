@@ -5,6 +5,7 @@ import com.example.timeisup.firebase.FirebaseManager
 import com.example.timeisup.notification.ScheduleNotificationManager
 import com.example.timeisup.service.ScheduleEventQueueManager
 import com.example.timeisup.service.ScheduleEventWork
+import com.example.timeisup.service.TempScheduleListManager
 import com.example.timeisup.task.taskmanager.TaskManager
 import com.google.firebase.database.DataSnapshot
 import java.util.*
@@ -23,6 +24,10 @@ class ScheduleListPresenter(private val mView: ScheduleListContract.View)
     private var mScheduleList: LinkedList<Pair<Schedule, String?>> = LinkedList<Pair<Schedule, String?>>()
     private val mNotConfirmedScheduleList: LinkedList<Pair<Schedule, String?>> = LinkedList<Pair<Schedule, String?>>()
     private val mConfirmedScheduleList: LinkedList<Pair<Schedule, String?>> = LinkedList<Pair<Schedule, String?>>()
+
+    override fun restoreScheduleListObject() {
+        TempScheduleListManager.restoreScheduleObject(this@ScheduleListPresenter)
+    }
 
     override fun performScheduleEventWork() {
         Log.d(TAG, "performScheduleEventWork()")
@@ -57,8 +62,18 @@ class ScheduleListPresenter(private val mView: ScheduleListContract.View)
         }
     }
 
+    override fun saveScheduleListObject() {
+        TempScheduleListManager.saveScheduleListObject(mScheduleList)
+    }
+
     fun makeNotification() {
         ScheduleNotificationManager.makeNotification(mView)
+    }
+
+    fun setScheduleListToRestore(scheduleList: LinkedList<Pair<Schedule, String?>>) {
+        mScheduleList = scheduleList
+
+        Log.d(TAG, "mScheduleList.size: ${mScheduleList.size}")
     }
 
     override fun getScheduleList(): LinkedList<Pair<Schedule, String?>> {
