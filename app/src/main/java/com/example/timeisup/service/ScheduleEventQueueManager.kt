@@ -19,10 +19,11 @@ object ScheduleEventQueueManager {
 
     fun enqueue(context: Context, work: ScheduleEventWork) {
         val childEvent: ChildEvent = work.mChildEvent
+        val scheduleName: String? = work.mDataSnapshot.child("scheduleName").getValue(String::class.java)
 
         mScheduleEventQueue.enqueue(work)
 
-        ScheduleNotificationManager.makeNotification(context, childEvent)
+        ScheduleNotificationManager.makeNotification(context, scheduleName, childEvent)
 
         Log.d(TAG, "mIsScheduleListActivityTop: $mIsScheduleListActivityTop, isQueueHasWork(): ${isQueueHasWork()}")
 

@@ -26,20 +26,20 @@ object ScheduleNotificationManager {
     private var mNotificationId: Int = 0
     private var mIsSelfTriggered: Boolean = false
 
-    fun makeNotification(context: Context, childEvent: ChildEvent) {
+    fun makeNotification(context: Context, scheduleName: String?, childEvent: ChildEvent) {
         Log.d(TAG, "makeNotification()")
         Log.d(TAG, "mIsSelfTriggered: $mIsSelfTriggered")
 
         if(!mIsSelfTriggered) {
             Log.d(TAG, "not triggered myself")
 
-            performNotification(context, childEvent)
+            performNotification(context, scheduleName, childEvent)
         }
 
         mIsSelfTriggered = false
     }
 
-    private fun performNotification(context: Context, childEvent: ChildEvent) {
+    private fun performNotification(context: Context, scheduleName: String?, childEvent: ChildEvent) {
         val pendingIntent: PendingIntent = PendingIntent.getActivity(context,
             222,
             Intent(context, MainActivity::class.java),
@@ -64,13 +64,16 @@ object ScheduleNotificationManager {
 
         when(childEvent) {
             ChildEvent.CHILDADDED -> {
-                mNotificationBuilder?.setContentText(context.resources.getString(R.string.added_notification_content))
+                mNotificationBuilder?.setContentText(context.resources.getString(R.string.added_notification_content)
+                        + "($scheduleName)")
             }
             ChildEvent.CHILDCHANGED -> {
-                mNotificationBuilder?.setContentText(context.resources.getString(R.string.changed_notification_content))
+                mNotificationBuilder?.setContentText(context.resources.getString(R.string.changed_notification_content)
+                        + "($scheduleName)")
             }
             ChildEvent.CHILDREMOVED -> {
-                mNotificationBuilder?.setContentText(context.resources.getString(R.string.removed_notification_content))
+                mNotificationBuilder?.setContentText(context.resources.getString(R.string.removed_notification_content)
+                        + "($scheduleName)")
             }
             ChildEvent.CHILDMOVED -> {
 
