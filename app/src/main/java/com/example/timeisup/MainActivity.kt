@@ -7,6 +7,7 @@ import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import com.example.timeisup.schedule.ScheduleListActivity
+import com.example.timeisup.service.ScheduleEventService
 
 class MainActivity : BaseActivity() {
     private val REQUEST_CODE: Int = 100
@@ -36,10 +37,18 @@ class MainActivity : BaseActivity() {
                 if (result == PackageManager.PERMISSION_DENIED) {
                     return
                 }
+                else if (result == PackageManager.PERMISSION_GRANTED) {
+                    if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        startForegroundService(Intent(applicationContext, ScheduleEventService::class.java))
+                    }
+                    else {
+                        startService(Intent(applicationContext, ScheduleEventService::class.java))
+                    }
+
+                    startActivity(Intent(this, ScheduleListActivity::class.java))
+                    finish()
+                }
             }
         }
-
-        startActivity(Intent(this, ScheduleListActivity::class.java))
-        finish()
     }
 }

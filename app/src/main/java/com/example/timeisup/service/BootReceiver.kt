@@ -17,6 +17,9 @@ class BootReceiver : BroadcastReceiver() {
                 if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     context.startForegroundService(Intent(context, ScheduleEventService::class.java))
                 }
+                else {
+                    context.startService(Intent(context, ScheduleEventService::class.java))
+                }
             }
         }
     }
