@@ -8,6 +8,7 @@ import android.os.Build
 import android.support.v4.app.NotificationCompat
 import android.util.Log
 import com.example.timeisup.R
+import com.example.timeisup.schedule.ChildEvent
 
 /**
  * Created by hclee on 2019-05-31.
@@ -21,7 +22,7 @@ object ScheduleNotificationManager {
     private var mNotificationId: Int = 0
     private var mIsSelfTriggered: Boolean = false
 
-    fun makeNotification(context: Context) {
+    fun makeNotification(context: Context, childEvent: ChildEvent) {
         Log.d(TAG, "makeNotification()")
         Log.d(TAG, "mIsSelfTriggered: $mIsSelfTriggered")
 
@@ -43,7 +44,21 @@ object ScheduleNotificationManager {
                     NotificationManager.IMPORTANCE_DEFAULT))
             }
 
-            mNotificationBuilder?.setContentText("변경된 일정을 확인하세요.")
+            when(childEvent) {
+                ChildEvent.CHILDADDED -> {
+                    mNotificationBuilder?.setContentText(context.resources.getString(R.string.added_notification_content))
+                }
+                ChildEvent.CHILDCHANGED -> {
+                    mNotificationBuilder?.setContentText(context.resources.getString(R.string.changed_notification_content))
+                }
+                ChildEvent.CHILDREMOVED -> {
+                    mNotificationBuilder?.setContentText(context.resources.getString(R.string.removed_notification_content))
+                }
+                ChildEvent.CHILDMOVED -> {
+
+                }
+            }
+
             mNotificationManager?.notify(mNotificationId++, mNotificationBuilder?.build())
         }
 

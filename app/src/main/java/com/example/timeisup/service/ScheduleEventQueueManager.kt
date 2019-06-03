@@ -3,6 +3,7 @@ package com.example.timeisup.service
 import android.content.Context
 import android.util.Log
 import com.example.timeisup.notification.ScheduleNotificationManager
+import com.example.timeisup.schedule.ChildEvent
 import com.example.timeisup.schedule.ScheduleListContract
 
 /**
@@ -17,9 +18,11 @@ object ScheduleEventQueueManager {
     var mIsScheduleListActivityTop: Boolean = false
 
     fun enqueue(context: Context, work: ScheduleEventWork) {
+        val childEvent: ChildEvent = work.mChildEvent
+
         mScheduleEventQueue.enqueue(work)
 
-        ScheduleNotificationManager.makeNotification(context)
+        ScheduleNotificationManager.makeNotification(context, childEvent)
 
         Log.d(TAG, "mIsScheduleListActivityTop: $mIsScheduleListActivityTop, isQueueHasWork(): ${isQueueHasWork()}")
 
