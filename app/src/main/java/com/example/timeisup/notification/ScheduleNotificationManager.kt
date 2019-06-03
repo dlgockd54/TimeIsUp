@@ -3,10 +3,13 @@ package com.example.timeisup.notification
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
 import android.os.Build
 import android.support.v4.app.NotificationCompat
 import android.util.Log
+import com.example.timeisup.MainActivity
 import com.example.timeisup.R
 import com.example.timeisup.schedule.ChildEvent
 
@@ -36,6 +39,11 @@ object ScheduleNotificationManager {
     }
 
     private fun performNotification(context: Context, childEvent: ChildEvent) {
+        val pendingIntent: PendingIntent = PendingIntent.getActivity(context,
+            222,
+            Intent(context, MainActivity::class.java),
+            PendingIntent.FLAG_UPDATE_CURRENT)
+
         mNotificationManager = mNotificationManager ?:
                 context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         mNotificationBuilder = mNotificationBuilder ?:
@@ -43,6 +51,7 @@ object ScheduleNotificationManager {
                     .setSmallIcon(R.drawable.ic_launcher_foreground)
                     .setDefaults(Notification.DEFAULT_ALL)
                     .setContentTitle("TimeIsUp")
+                    .setContentIntent(pendingIntent)
                     .setAutoCancel(true)
 
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
