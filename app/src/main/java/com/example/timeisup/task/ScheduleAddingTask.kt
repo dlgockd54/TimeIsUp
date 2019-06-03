@@ -53,14 +53,31 @@ class ScheduleAddingTask(presenter: ScheduleListContract.Presenter): ScheduleLis
         Log.d(TAG, "time: $time")
         Log.d(TAG, "placeName: $placeName")
 
-        val schedule: Schedule = Schedule(scheduleName, time, placeName, latitude, longitude, isConfirmed)
+        val scheduleToAdd: Schedule = Schedule(scheduleName, time, placeName, latitude, longitude, isConfirmed)
+
+        mConfirmedScheduleList.clear()
+        mNotConfirmedScheduleList.clear()
+
+        for(scheduleItem in mScheduleList) {
+            val schedule: Schedule = scheduleItem.first
+            val key: String? = scheduleItem.second
+
+            scheduleItem.first.getIsConfirmed()?.let {
+                if(it) {
+                    addConfirmedScheduleToList(schedule, key)
+                }
+                else {
+                    addNotConfirmedScheduleToList(schedule, key)
+                }
+            }
+        }
 
         isConfirmed?.let {
             if(it) {
-                addConfirmedScheduleToList(schedule, key)
+                addConfirmedScheduleToList(scheduleToAdd, key)
             }
             else {
-                addNotConfirmedScheduleToList(schedule, key)
+                addNotConfirmedScheduleToList(scheduleToAdd, key)
             }
         }
 
