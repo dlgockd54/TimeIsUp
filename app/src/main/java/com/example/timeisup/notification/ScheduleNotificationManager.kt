@@ -29,40 +29,44 @@ object ScheduleNotificationManager {
         if(!mIsSelfTriggered) {
             Log.d(TAG, "not triggered myself")
 
-            mNotificationManager = mNotificationManager ?:
-                    context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-            mNotificationBuilder = mNotificationBuilder ?:
-                    NotificationCompat.Builder(context, "default")
-                        .setSmallIcon(R.drawable.ic_launcher_foreground)
-                        .setDefaults(Notification.DEFAULT_ALL)
-                        .setContentTitle("TimeIsUp")
-                        .setAutoCancel(true)
-
-            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                mNotificationManager?.createNotificationChannel(NotificationChannel("default",
-                    "default",
-                    NotificationManager.IMPORTANCE_DEFAULT))
-            }
-
-            when(childEvent) {
-                ChildEvent.CHILDADDED -> {
-                    mNotificationBuilder?.setContentText(context.resources.getString(R.string.added_notification_content))
-                }
-                ChildEvent.CHILDCHANGED -> {
-                    mNotificationBuilder?.setContentText(context.resources.getString(R.string.changed_notification_content))
-                }
-                ChildEvent.CHILDREMOVED -> {
-                    mNotificationBuilder?.setContentText(context.resources.getString(R.string.removed_notification_content))
-                }
-                ChildEvent.CHILDMOVED -> {
-
-                }
-            }
-
-            mNotificationManager?.notify(mNotificationId++, mNotificationBuilder?.build())
+            performNotification(context, childEvent)
         }
 
         mIsSelfTriggered = false
+    }
+
+    private fun performNotification(context: Context, childEvent: ChildEvent) {
+        mNotificationManager = mNotificationManager ?:
+                context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        mNotificationBuilder = mNotificationBuilder ?:
+                NotificationCompat.Builder(context, "default")
+                    .setSmallIcon(R.drawable.ic_launcher_foreground)
+                    .setDefaults(Notification.DEFAULT_ALL)
+                    .setContentTitle("TimeIsUp")
+                    .setAutoCancel(true)
+
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            mNotificationManager?.createNotificationChannel(NotificationChannel("default",
+                "default",
+                NotificationManager.IMPORTANCE_DEFAULT))
+        }
+
+        when(childEvent) {
+            ChildEvent.CHILDADDED -> {
+                mNotificationBuilder?.setContentText(context.resources.getString(R.string.added_notification_content))
+            }
+            ChildEvent.CHILDCHANGED -> {
+                mNotificationBuilder?.setContentText(context.resources.getString(R.string.changed_notification_content))
+            }
+            ChildEvent.CHILDREMOVED -> {
+                mNotificationBuilder?.setContentText(context.resources.getString(R.string.removed_notification_content))
+            }
+            ChildEvent.CHILDMOVED -> {
+
+            }
+        }
+
+        mNotificationManager?.notify(mNotificationId++, mNotificationBuilder?.build())
     }
 
     fun setIsSelfTriggered(isSelfTriggered: Boolean) {
