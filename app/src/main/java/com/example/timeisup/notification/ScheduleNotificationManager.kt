@@ -20,6 +20,7 @@ import com.example.timeisup.schedule.ChildEvent
 object ScheduleNotificationManager {
     private val TAG: String = ScheduleNotificationManager::class.java.simpleName
 
+    private const val NOTIFICATION_TIMEOUT: Long = 1000 * 60 * 30 // Auto cancel notification after 30min
     private var mNotificationManager: NotificationManager? = null
     private var mNotificationBuilder: NotificationCompat.Builder? = null
     private var mNotificationId: Int = 0
@@ -53,6 +54,7 @@ object ScheduleNotificationManager {
                     .setContentTitle("TimeIsUp")
                     .setContentIntent(pendingIntent)
                     .setAutoCancel(true)
+                    .setTimeoutAfter(NOTIFICATION_TIMEOUT)
 
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             mNotificationManager?.createNotificationChannel(NotificationChannel("default",
