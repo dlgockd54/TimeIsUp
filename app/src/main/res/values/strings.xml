@@ -11,7 +11,8 @@
     <string name="add_schedule">일정 추가</string>
     <string name="edit_schedule">일정 변경</string>
     <string name="cancel">취소</string>
-    <string name="confirm_schedule">일정 확정하기</string>
+    <string name="confirm_schedule">이 일정 확정하기</string>
+    <string name="unconfirm_schedule">확정 취소하기</string>
     <string name="added_notification_content">일정이 추가 되었습니다.</string>
     <string name="changed_notification_content">변경된 일정을 확인하세요.</string>
     <string name="removed_notification_content">일정이 삭제 되었습니다.</string>

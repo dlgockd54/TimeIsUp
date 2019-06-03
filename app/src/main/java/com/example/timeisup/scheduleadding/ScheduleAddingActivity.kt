@@ -53,6 +53,7 @@ class ScheduleAddingActivity
     lateinit var mCancelButton: Button
     lateinit var mEditScheduleButton: Button
     lateinit var mScheduleConfirmSwitchButton: SwitchButton
+    lateinit var mFixScheduleTextView: TextView
     lateinit var mAddDateRelativeLayout: RelativeLayout
     lateinit var mAddTimeRelativeLayout: RelativeLayout
     lateinit var mAddPlaceRelativeLayout: RelativeLayout
@@ -100,6 +101,7 @@ class ScheduleAddingActivity
         mEditTimeImageView = iv_edit_time
         mPlaceTextView = tv_place
         mAddPlaceTextView = tv_add_place
+        mFixScheduleTextView = tv_fix_schedule
         mScheduleConfirmSwitchButton = sb_confirm_schedule.apply {
             setOnCheckedChangeListener(this@ScheduleAddingActivity)
         }
@@ -252,6 +254,13 @@ class ScheduleAddingActivity
         Log.d(TAG, "onCheckedChanged()")
 
         mIsScheduleConfirmed = isChecked
+
+        if(mIsScheduleConfirmed) {
+            mFixScheduleTextView.text = resources.getString(R.string.unconfirm_schedule)
+        }
+        else {
+            mFixScheduleTextView.text = resources.getString(R.string.confirm_schedule)
+        }
 
         Log.d(TAG, "mIsScheduleFix: $mIsScheduleConfirmed")
     }
