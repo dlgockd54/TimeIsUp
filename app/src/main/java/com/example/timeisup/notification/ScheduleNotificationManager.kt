@@ -8,8 +8,6 @@ import android.os.Build
 import android.support.v4.app.NotificationCompat
 import android.util.Log
 import com.example.timeisup.R
-import com.example.timeisup.schedule.ScheduleListActivity
-import com.example.timeisup.schedule.ScheduleListContract
 
 /**
  * Created by hclee on 2019-05-31.
@@ -23,11 +21,9 @@ object ScheduleNotificationManager {
     private var mNotificationId: Int = 0
     private var mIsSelfTriggered: Boolean = false
 
-    fun makeNotification(view: ScheduleListContract.View) {
+    fun makeNotification(context: Context) {
         Log.d(TAG, "makeNotification()")
         Log.d(TAG, "mIsSelfTriggered: $mIsSelfTriggered")
-
-        val context: Context = (view as ScheduleListActivity).applicationContext
 
         if(!mIsSelfTriggered) {
             Log.d(TAG, "not triggered myself")

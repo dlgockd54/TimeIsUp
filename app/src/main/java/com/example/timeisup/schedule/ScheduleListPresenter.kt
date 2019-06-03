@@ -2,7 +2,6 @@ package com.example.timeisup.schedule
 
 import android.util.Log
 import com.example.timeisup.firebase.FirebaseManager
-import com.example.timeisup.notification.ScheduleNotificationManager
 import com.example.timeisup.service.ScheduleEventQueueManager
 import com.example.timeisup.service.ScheduleEventWork
 import com.example.timeisup.service.TempScheduleListManager
@@ -64,10 +63,6 @@ class ScheduleListPresenter(private val mView: ScheduleListContract.View)
 
     override fun saveScheduleListObject() {
         TempScheduleListManager.saveScheduleListObject(mScheduleList)
-    }
-
-    fun makeNotification() {
-        ScheduleNotificationManager.makeNotification(mView)
     }
 
     fun setScheduleListToRestore(scheduleList: LinkedList<Pair<Schedule, String?>>) {

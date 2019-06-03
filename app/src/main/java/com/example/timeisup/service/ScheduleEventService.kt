@@ -50,7 +50,7 @@ class ScheduleEventService : Service() {
     }
 
     private fun addWorkToQueue(event: ChildEvent, dataSnapshot: DataSnapshot) {
-        ScheduleEventQueueManager.enqueue(ScheduleEventWork(event, Date().time, dataSnapshot))
+        ScheduleEventQueueManager.enqueue(this, ScheduleEventWork(event, Date().time, dataSnapshot))
     }
 
     override fun onCreate() {

@@ -1,6 +1,8 @@
 package com.example.timeisup.service
 
+import android.content.Context
 import android.util.Log
+import com.example.timeisup.notification.ScheduleNotificationManager
 import com.example.timeisup.schedule.ScheduleListContract
 
 /**
@@ -14,8 +16,10 @@ object ScheduleEventQueueManager {
     lateinit var mPresenter: ScheduleListContract.Presenter
     var mIsScheduleListActivityTop: Boolean = false
 
-    fun enqueue(work: ScheduleEventWork) {
+    fun enqueue(context: Context, work: ScheduleEventWork) {
         mScheduleEventQueue.enqueue(work)
+
+        ScheduleNotificationManager.makeNotification(context)
 
         Log.d(TAG, "mIsScheduleListActivityTop: $mIsScheduleListActivityTop, isQueueHasWork(): ${isQueueHasWork()}")
 
@@ -27,7 +31,7 @@ object ScheduleEventQueueManager {
         }
     }
 
-    fun performScheduleEventWork() {
+    private fun performScheduleEventWork() {
 //        mActivity.performScheduleEventWork()
         mPresenter.performScheduleEventWork()
     }
