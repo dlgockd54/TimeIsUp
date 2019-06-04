@@ -16,6 +16,7 @@ class ScheduleEventService : Service() {
     private val TAG: String = ScheduleEventService::class.java.simpleName
     private lateinit var mAlarmHandler: AlarmHandler
     private lateinit var mAlarmThread: Thread
+    private var mIsThreadRunning: Boolean = false
     private val mChildEventListener: ChildEventListener = object: ChildEventListener {
         override fun onCancelled(databaseError: DatabaseError) {
             Log.d(TAG, "onCancelled()")
@@ -69,7 +70,7 @@ class ScheduleEventService : Service() {
         mAlarmThread = Thread(Runnable {
             Log.d(TAG, "run()")
 
-            while(true) {
+            while(mIsThreadRunning) {
                 val calendar: Calendar = Calendar.getInstance()
                 val message: Message = mAlarmHandler.obtainMessage().apply {
                     what = AlarmHandler.MSG_ALARM
@@ -87,6 +88,7 @@ class ScheduleEventService : Service() {
             }
         })
 
+        mIsThreadRunning = true
         mAlarmThread.start()
 
         return START_STICKY
@@ -98,6 +100,8 @@ class ScheduleEventService : Service() {
 
     override fun onDestroy() {
         Log.d(TAG, "onDestroy()")
+
+        mIsThreadRunning = false
 
         FirebaseManager.removeChildEventListener(mChildEventListener)
     }
