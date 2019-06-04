@@ -3,13 +3,10 @@ package com.example.timeisup.service
 import android.app.Notification
 import android.app.Service
 import android.content.Intent
-import android.os.Build
-import android.os.IBinder
+import android.os.*
 import android.util.Log
 import com.example.timeisup.firebase.FirebaseManager
 import com.example.timeisup.schedule.ChildEvent
-import com.example.timeisup.task.RescheduleTask
-import com.example.timeisup.task.ScheduleAddingTask
 import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -17,6 +14,8 @@ import java.util.*
 
 class ScheduleEventService : Service() {
     private val TAG: String = ScheduleEventService::class.java.simpleName
+    private lateinit var mAlarmHandler: AlarmHandler
+    private lateinit var mAlarmThread: Thread
     private val mChildEventListener: ChildEventListener = object: ChildEventListener {
         override fun onCancelled(databaseError: DatabaseError) {
             Log.d(TAG, "onCancelled()")
@@ -65,6 +64,30 @@ class ScheduleEventService : Service() {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         Log.d(TAG, "onStartCommand()")
+
+        mAlarmHandler = AlarmHandler(applicationContext, Looper.getMainLooper())
+        mAlarmThread = Thread(Runnable {
+            Log.d(TAG, "run()")
+
+            while(true) {
+                val calendar: Calendar = Calendar.getInstance()
+                val message: Message = mAlarmHandler.obtainMessage().apply {
+                    what = AlarmHandler.MSG_ALARM
+                }
+
+                if (calendar.get(Calendar.HOUR_OF_DAY) == 0 || calendar.get(Calendar.HOUR_OF_DAY) == 24) {
+                    if(calendar.get(Calendar.MINUTE) in 0..5) {
+                        Log.d(TAG, "minute: ${calendar.get(Calendar.MINUTE)}")
+
+                        mAlarmHandler.sendMessage(message)
+                    }
+                }
+
+                Thread.sleep(1000 * 60 * 5)
+            }
+        })
+
+        mAlarmThread.start()
 
         return START_STICKY
     }

@@ -39,6 +39,27 @@ object ScheduleNotificationManager {
         mIsSelfTriggered = false
     }
 
+    fun makeAlarmNotification(context: Context, scheduleName: String?) {
+        mNotificationManager = mNotificationManager ?:
+                context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        mNotificationBuilder = mNotificationBuilder ?:
+                NotificationCompat.Builder(context, "default")
+                    .setSmallIcon(R.drawable.ic_launcher_foreground)
+                    .setDefaults(Notification.DEFAULT_ALL)
+                    .setContentTitle("TimeIsUp")
+                    .setAutoCancel(true)
+                    .setTimeoutAfter(NOTIFICATION_TIMEOUT)
+
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            mNotificationManager?.createNotificationChannel(NotificationChannel("default",
+                "default",
+                NotificationManager.IMPORTANCE_DEFAULT))
+        }
+
+        mNotificationBuilder?.setContentText("오늘의 일정 ${scheduleName}")
+        mNotificationManager?.notify(mNotificationId++, mNotificationBuilder?.build())
+    }
+
     private fun performNotification(context: Context, scheduleName: String?, childEvent: ChildEvent) {
         val pendingIntent: PendingIntent = PendingIntent.getActivity(context,
             222,

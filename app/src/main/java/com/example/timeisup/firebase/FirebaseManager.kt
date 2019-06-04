@@ -4,11 +4,14 @@ import android.util.Log
 import com.example.timeisup.notification.ScheduleNotificationManager
 import com.example.timeisup.schedule.Schedule
 import com.example.timeisup.schedule.ScheduleListPresenter
+import com.example.timeisup.service.Listener
 import com.google.android.gms.tasks.OnCanceledListener
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.OnFailureListener
 import com.google.android.gms.tasks.OnSuccessListener
 import com.google.firebase.database.*
+import java.util.*
+import kotlin.collections.HashMap
 
 /**
  * Created by hclee on 2019-05-22.
@@ -67,6 +70,39 @@ object FirebaseManager {
 
         ScheduleNotificationManager.setIsSelfTriggered(true)
         rescheduleThread.start()
+    }
+
+    fun makeScheduleFromDatabase(listener: Listener) {
+        Log.d(TAG, "getScheduleFromDatabase()")
+
+        var schedule: Schedule?
+        val query: Query = mDatabaseReference.child(ScheduleListPresenter.DB_NODE_NAME).orderByChild("time")
+            .apply {
+                addChildEventListener(object : ChildEventListener {
+                    override fun onCancelled(p0: DatabaseError) {
+                        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+                    }
+
+                    override fun onChildMoved(p0: DataSnapshot, p1: String?) {
+                        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+                    }
+
+                    override fun onChildChanged(p0: DataSnapshot, p1: String?) {
+                        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+                    }
+
+                    override fun onChildAdded(p0: DataSnapshot, p1: String?) {
+                        schedule = p0.getValue(Schedule::class.java)
+                        Log.d(TAG, "time: ${schedule?.getTime()}")
+
+                        listener.onScheduleMade(schedule)
+                    }
+
+                    override fun onChildRemoved(p0: DataSnapshot) {
+                        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+                    }
+                })
+            }
     }
 
     fun removeScheduleFromDatabase(key: String) {
