@@ -44,7 +44,7 @@ object ScheduleNotificationManager {
                 context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         mNotificationBuilder = mNotificationBuilder ?:
                 NotificationCompat.Builder(context, "default")
-                    .setSmallIcon(R.drawable.ic_launcher_foreground)
+                    .setSmallIcon(R.mipmap.ic_launcher_foreground)
                     .setDefaults(Notification.DEFAULT_ALL)
                     .setContentTitle("TimeIsUp")
                     .setAutoCancel(true)
@@ -70,7 +70,7 @@ object ScheduleNotificationManager {
                 context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         mNotificationBuilder = mNotificationBuilder ?:
                 NotificationCompat.Builder(context, "default")
-                    .setSmallIcon(R.drawable.ic_launcher_foreground)
+                    .setSmallIcon(R.mipmap.ic_launcher_foreground)
                     .setDefaults(Notification.DEFAULT_ALL)
                     .setContentTitle("TimeIsUp")
                     .setContentIntent(pendingIntent)
